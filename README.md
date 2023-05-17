@@ -1,4 +1,4 @@
-# 🚀 ERFDFS: Elastic and Resilient FUSE-based Distributed File System
+# 🚀 LightDFS: Light Distributed File System
 ![](https://img.shields.io/badge/release-v0.0.1-blue)
 ![](https://img.shields.io/badge/unit%20tests-passing-brightgreen)
 ![](https://img.shields.io/badge/python--fuse-1.0.5-blueviolet)
@@ -54,8 +54,8 @@
 * [ ] RESTful API
 
 ## 🙌 贡献者列表
-<a href="https://github.com/PKUcoldkeyboard/ERFFS/graphs/contributors">
-  <img src="https://contrib.rocks./image?repo=PKUcoldkeyboard/ERFFS" />
+<a href="https://github.com/PKUcoldkeyboard/LightDFS/graphs/contributors">
+  <img src="https://contrib.rocks./image?repo=PKUcoldkeyboard/LightDFS" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks.).
