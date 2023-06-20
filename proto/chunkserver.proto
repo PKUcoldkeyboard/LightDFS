@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package lightdfs;
+
+import "status_code.proto";
+
+option cc_generic_services = true;
+
+message WriteBlockRequest {
+    int64 sequence_id = 1;
+    int64 block_id = 2;
+    int64 offset = 3;
+    int32 packet_seq = 4;
+    bytes databuf = 5;
+    repeated string chunkservers = 6;
+    bool is_last = 7;
+    repeated string desc = 11;
+    repeated int64 timestamp = 12;
+    int32 recover_version = 13;
+    bool sync_on_close = 14;
+    int64 total_size = 15;
+}
+
+message WriteBlockResponse {
+    int64 sequence_id = 1;
+    StatusCode status = 2;
+    string bad_chunkserver = 3;
+    int64 current_size = 4;
+    int32 current_seq = 5;
+    repeated string desc = 11;
+    repeated int64 timestamp = 12;
+}
+
+message ReadBlockRequest {
+    int64 sequence_id = 1;
+    int64 block_id = 2;
+    int64 offset = 3;
+    int32 read_len = 4;
+}
+message ReadBlockResponse {
+    int64 sequence_id = 1;
+    StatusCode status = 2;
+    bytes databuf = 3;
+    repeated int64 timestamp = 9;
+}
+
+message GetBlockInfoRequest {
+    int64 sequence_id = 1;
+    int64 block_id = 2;
+}
+message GetBlockInfoResponse {
+    int64 sequence_id = 1;
+    StatusCode status = 2;
+    int64 block_size = 3;
+    repeated int64 timestamp = 9;
+}
+
+service ChunkServer {
+    rpc WriteBlock(WriteBlockRequest) returns(WriteBlockResponse);
+    rpc ReadBlock(ReadBlockRequest) returns(ReadBlockResponse);
+    rpc GetBlockInfo(GetBlockInfoRequest) returns(GetBlockInfoResponse);
+}

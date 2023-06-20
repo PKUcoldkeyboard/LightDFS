@@ -9,41 +9,41 @@ enum StatusCode {
     kVersionError = 3;
     kIsFollower = 4;
     kInShutdownProgress = 5;
-    kBadParameter = 100;
-    kDirNotEmpty = 101;
-    kTargetDirExists = 102;
-    kFileExists = 103;
-    kBlockClosed = 104;
-    kBlockExist = 105;
-    kReadOnly = 106;
-    kNsNotFound = 107;
-    kCsNotFound = 108;
-    kNoPermission = 200;
-    kNotEnoughQuota = 300;
-    kNetworkUnavailable = 400;
-    kTimeout = 500;
-    kWriteError = 501;
-    kReadError = 502;
-    kNoEnoughSpace = 600;
-    kCsTooMuchUnfinishedWrite = 700;
-    kCsTooMuchPendingBuffer = 701;
-    kGetChunkServerError = 702;
-    kUpdateError = 800;
-    kSyncMetaFailed = 801;
-    kSafeMode = 802;
-    kServiceStop = 803;
-    kDirLocked = 804;
-    kDirUnlock = 805;
-    kDirLockCleaning = 806;
+    kBadParameter = 6;
+    kDirNotEmpty = 7;
+    kTargetDirExists = 8;
+    kFileExists = 9;
+    kBlockClosed = 10;
+    kBlockExist = 11;
+    kReadOnly = 12;
+    kNsNotFound = 13;
+    kCsNotFound = 14;
+    kNoPermission = 15;
+    kNotEnoughQuota = 16;
+    kNetworkUnavailable = 17;
+    kTimeout = 18;
+    kWriteError = 19;
+    kReadError = 20;
+    kNoEnoughSpace = 21;
+    kCsTooMuchUnfinishedWrite = 22;
+    kCsTooMuchPendingBuffer = 23;
+    kGetChunkServerError = 24;
+    kUpdateError = 25;
+    kSyncMetaFailed = 26;
+    kSafeMode = 27;
+    kServiceStop = 28;
+    kDirLocked = 29;
+    kDirUnlock = 30;
+    kDirLockCleaning = 31;
 }
 
 enum ChunkServerStatus {
-    kCsActive = 101;
-    kCsWaitClean = 102;
-    kCsCleaning = 103;
-    kCsOffLine = 104;
-    kCsStandby = 105;
-    kCsReadonly = 106;
+    kCsActive = 0;
+    kCsWaitClean = 1;
+    kCsCleaning = 2;
+    kCsOffLine = 3;
+    kCsStandby = 4;
+    kCsReadonly = 5;
 }
 
 enum RecoverStatus {
@@ -54,7 +54,7 @@ enum RecoverStatus {
     kIncomplete = 4;
     kLost = 5;
     kBlockWriting = 6;
-    kAny = 20;
+    kAny = 7;
 }
 
 enum SyncStatus {
@@ -68,8 +68,8 @@ enum RecoverPri {
 }
 
 message Params {
-    optional int32 report_interval = 1 [default = -1];
-    optional int32 report_size = 2 [default = -1];
-    optional int32 recover_size = 3 [default = -1];
-    optional int32 keepalive_timeout = 4 [default = -1];
+    int32 report_interval = 1;
+    int32 report_size = 2;
+    int32 recover_size = 3;
+    int32 keepalive_timeout = 4;
 }

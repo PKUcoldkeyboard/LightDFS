@@ -3,18 +3,17 @@ syntax = "proto3";
 package lightdfs;
 
 message FileInfo {
-    optional int64 entry_id = 1;
-    optional int64 version = 2;
-    optional int32 type = 3 [default= 0755];
+    int64 entry_id = 1;
+    int64 version = 2;
+    int32 type = 3;
     repeated int64 blocks = 4;
-    optional uint32 ctime = 5;
-    optional string name = 6;
-    optional int64 size = 7;
-    optional int32 replicas = 8;
-    optional int64 parent_entry_id = 9;
-    optional int32 owner = 10;
+    uint32 ctime = 5;
+    string name = 6;
+    int64 size = 7;
+    int32 replicas = 8;
+    int64 parent_entry_id = 9;
+    int32 owner = 10;
     // 块服务器地址
     repeated string cs_addrs = 11;
-    // 符号链接
-    optional string sym_link = 12;
+    string sym_link = 12;
 }

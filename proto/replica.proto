@@ -4,24 +4,24 @@ package lightdfs.replica;
 
 message AppendLogRequest {
     repeated bytes log_data = 1;
-    optional int64 index = 2;
-    optional int64 term = 3;
+    int64 index = 2;
+    int64 term = 3;
 }
 
 message AppendLogResponse {
-    optional bool success = 1;
-    optional int64 index = 2;
+    bool success = 1;
+    int64 index = 2;
 }
 
 message SnapshotRequest {
-    optional bytes data = 1;
-    optional int64 seq = 2;
-    optional int64 index = 3;
-    optional int64 term = 4;
+    bytes data = 1;
+    int64 seq = 2;
+    int64 index = 3;
+    int64 term = 4;
 }
 
 message SnapshotResponse {
-    optional bool success = 1;
+    bool success = 1;
 }
 
 service Replica {

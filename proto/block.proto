@@ -3,9 +3,9 @@ syntax = "proto3";
 package lightdfs;
 
 message BlockMeta {
-    optional int64 block_id = 1;
-    optional int64 block_size = 2;
-    optional int64 checksum = 3;
-    optional int64 version = 4 [default = -1];
-    optional string store_path = 5;
+    int64 block_id = 1;
+    int64 block_size = 2;
+    int64 checksum = 3;
+    int64 version = 4;
+    string store_path = 5;
 }
