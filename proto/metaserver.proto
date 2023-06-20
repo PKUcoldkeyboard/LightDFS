@@ -1,3 +1,5 @@
+syntax = "proto3";
+
 import "nameserver.proto";
 import "status_code.proto";
 

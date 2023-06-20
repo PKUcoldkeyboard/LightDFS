@@ -1,3 +1,5 @@
+syntax = "proto3";
+
 import "file.proto";
 import "status_code.proto";
 

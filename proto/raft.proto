@@ -1,3 +1,5 @@
+syntax = "proto3";
+
 package lightdfs;
 
 option cc_generic_services = true;

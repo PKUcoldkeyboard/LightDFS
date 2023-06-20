@@ -1,3 +1,5 @@
+syntax = "proto3";
+
 package lightdfs;
 
 message FileInfo {
@@ -11,6 +13,8 @@ message FileInfo {
     optional int32 replicas = 8;
     optional int64 parent_entry_id = 9;
     optional int32 owner = 10;
+    // 块服务器地址
     repeated string cs_addrs = 11;
+    // 符号链接
     optional string sym_link = 12;
 }
