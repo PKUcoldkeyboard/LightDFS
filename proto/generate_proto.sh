@@ -6,12 +6,7 @@ OUT_DIR="./generated"
 # 创建输出目录
 mkdir -p "$OUT_DIR"
 
-# 解析metaserver.proto、nameserver.proto、chunkserver.proto、raft.proto、replica.proto
 for file in "$PROTO_DIR"/*.proto; do
-  # 如果不是metaserver.proto、nameserver.proto、chunkserver.proto、raft.proto、replica.proto则跳过
-  if [[ "$file" != "$PROTO_DIR/metaserver.proto" && "$file" != "$PROTO_DIR/nameserver.proto" && "$file" != "$PROTO_DIR/chunkserver.proto" && "$file" != "$PROTO_DIR/raft.proto" && "$file" != "$PROTO_DIR/replica.proto" ]]; then
-    continue
-  fi
   filename=$(basename "$file")
   filename_without_ext="${filename%.*}"
 
