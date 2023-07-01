@@ -11,126 +11,33 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import file_pb2 as file__pb2
-import status_code_pb2 as status__code__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10nameserver.proto\x12\x08lightdfs\x1a\nfile.proto\x1a\x11status_code.proto\"\x90\x04\n\x0f\x43hunkServerInfo\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x11\n\tipaddress\x18\x12 \x01(\t\x12\x12\n\nstart_time\x18\x11 \x01(\t\x12\x16\n\x0elast_heartbeat\x18\x03 \x01(\x05\x12\x11\n\tdata_size\x18\x04 \x01(\x03\x12\x12\n\ndisk_quota\x18\x05 \x01(\x03\x12\x11\n\tblock_num\x18\x07 \x01(\x05\x12\x0f\n\x07is_dead\x18\x08 \x01(\x08\x12+\n\x06status\x18\t \x01(\x0e\x32\x1b.lightdfs.ChunkServerStatus\x12\n\n\x02ip\x18\n \x01(\x05\x12\x0f\n\x07\x62uffers\x18\x0b \x01(\x05\x12\x13\n\x0bpending_buf\x18\x1c \x01(\x05\x12\x17\n\x0fpending_recover\x18\x1d \x01(\x05\x12\x0c\n\x04kick\x18\x0c \x01(\x08\x12\x0c\n\x04zone\x18\r \x01(\t\x12\x12\n\ndatacenter\x18\x0e \x01(\t\x12\x0c\n\x04rack\x18\x0f \x01(\t\x12\x0b\n\x03tag\x18\x10 \x01(\t\x12\x0c\n\x04load\x18\x14 \x01(\x01\x12\r\n\x05w_qps\x18\x15 \x01(\x05\x12\x0f\n\x07w_speed\x18\x16 \x01(\x03\x12\r\n\x05r_qps\x18\x17 \x01(\x05\x12\x0f\n\x07r_speed\x18\x18 \x01(\x03\x12\x17\n\x0fwriting_buffers\x18\x19 \x01(\x03\x12\x15\n\ractive_blocks\x18\x1a \x01(\x03\x12\x15\n\rrecover_speed\x18\x1b \x01(\x03\"{\n\x11\x43reateFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x0c\n\x04mode\x18\x03 \x01(\x05\x12\r\n\x05\x66lags\x18\x04 \x01(\x05\x12\x13\n\x0breplica_num\x18\x05 \x01(\x05\x12\x0c\n\x04user\x18\x07 \x01(\t\"O\n\x12\x43reateFileResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"o\n\x0cLocatedBlock\x12\x10\n\x08\x62lock_id\x18\x01 \x01(\x03\x12\x12\n\nblock_size\x18\x02 \x01(\x03\x12)\n\x06\x63hains\x18\x03 \x03(\x0b\x32\x19.lightdfs.ChunkServerInfo\x12\x0e\n\x06status\x18\x04 \x01(\x05\"n\n\x13\x46ileLocationRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x0e\n\x06offset\x18\x03 \x01(\x03\x12\x11\n\tblock_num\x18\x04 \x01(\x05\x12\x0c\n\x04user\x18\x05 \x01(\t\"y\n\x14\x46ileLocationResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12&\n\x06\x62locks\x18\x03 \x03(\x0b\x32\x16.lightdfs.LocatedBlock\"9\n\x14ListDirectoryRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"u\n\x15ListDirectoryResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12!\n\x05\x66iles\x18\x03 \x03(\x0b\x32\x12.lightdfs.FileInfo\"0\n\x0bStatRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"p\n\x0cStatResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12%\n\tfile_info\x18\x03 \x01(\x0b\x32\x12.lightdfs.FileInfo\"F\n\rRenameRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0f\n\x07oldpath\x18\x02 \x01(\t\x12\x0f\n\x07newpath\x18\x03 \x01(\t\"K\n\x0eRenameResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"Q\n\x0f\x41\x64\x64\x42lockRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x16\n\x0e\x63lient_address\x18\x03 \x01(\t\"t\n\x10\x41\x64\x64\x42lockResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12%\n\x05\x62lock\x18\x03 \x01(\x0b\x32\x16.lightdfs.LocatedBlock\"Z\n\x10SyncBlockRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x10\n\x08\x62lock_id\x18\x02 \x01(\x03\x12\x11\n\tfile_name\x18\x03 \x01(\t\x12\x0c\n\x04size\x18\x04 \x01(\x03\"N\n\x11SyncBlockResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"\x93\x01\n\x12\x46inishBlockRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x10\n\x08\x62lock_id\x18\x02 \x01(\x03\x12\x15\n\rblock_version\x18\x03 \x01(\x03\x12\x11\n\tfile_name\x18\x04 \x01(\t\x12\x12\n\nblock_size\x18\x05 \x01(\x03\x12\x18\n\x10\x63lose_with_error\x18\x06 \x01(\x08\"P\n\x13\x46inishBlockResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"2\n\rUnlinkRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"K\n\x0eUnlinkResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"N\n\x16\x44\x65leteDirectoryRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x03 \x01(\x08\"T\n\x17\x44\x65leteDirectoryResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"V\n\x17\x43hangeReplicaNumRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x13\n\x0breplica_num\x18\x03 \x01(\x05\"U\n\x18\x43hangeReplicaNumResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"\xb0\x02\n\x10HeartBeatRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x18\n\x10\x63hunkserver_addr\x18\x02 \x01(\t\x12\x16\n\x0e\x63hunkserver_id\x18\x03 \x01(\x05\x12\x19\n\x11namespace_version\x18\x04 \x01(\x03\x12\x11\n\tblock_num\x18\x05 \x01(\x05\x12\x11\n\tdata_size\x18\x06 \x01(\x03\x12\x0f\n\x07\x62uffers\x18\x07 \x01(\x05\x12\x13\n\x0bpending_buf\x18\r \x01(\x05\x12\x17\n\x0fpending_recover\x18\x0e \x01(\x05\x12\r\n\x05w_qps\x18\x08 \x01(\x05\x12\x0f\n\x07w_speed\x18\t \x01(\x03\x12\r\n\x05r_qps\x18\n \x01(\x05\x12\x0f\n\x07r_speed\x18\x0b \x01(\x03\x12\x15\n\rrecover_speed\x18\x0c \x01(\x03\"\xa5\x01\n\x11HeartBeatResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12\x19\n\x11namespace_version\x18\x03 \x01(\x03\x12\x0c\n\x04kick\x18\x04 \x01(\x08\x12\x17\n\x0freport_interval\x18\x05 \x01(\x05\x12\x13\n\x0breport_size\x18\x06 \x01(\x05\"\\\n\x0fReportBlockInfo\x12\x10\n\x08\x62lock_id\x18\x01 \x01(\x03\x12\x0f\n\x07version\x18\x02 \x01(\x03\x12\x12\n\nblock_size\x18\x03 \x01(\x03\x12\x12\n\nis_recover\x18\x04 \x01(\x08\"g\n\x0bReplicaInfo\x12\x10\n\x08\x62lock_id\x18\x01 \x01(\x03\x12\x1b\n\x13\x63hunkserver_address\x18\x02 \x03(\t\x12\x10\n\x08priority\x18\x05 \x01(\x08\x12\x17\n\x0frecover_timeout\x18\x06 \x01(\x05\"|\n\x0fRegisterRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x18\n\x10\x63hunkserver_addr\x18\x03 \x01(\t\x12\x19\n\x11namespace_version\x18\x04 \x01(\x03\x12\x0b\n\x03tag\x18\x05 \x01(\t\x12\x12\n\ndisk_quota\x18\x07 \x01(\x03\"\xc1\x01\n\x10RegisterResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12\x16\n\x0e\x63hunkserver_id\x18\x05 \x01(\x05\x12\x19\n\x11namespace_version\x18\x06 \x01(\x03\x12\x17\n\x0freport_interval\x18\x07 \x01(\x05\x12\x13\n\x0breport_size\x18\x08 \x01(\x05\x12\x11\n\treport_id\x18\t \x01(\x03\"\xb5\x01\n\x12\x42lockReportRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x16\n\x0e\x63hunkserver_id\x18\x02 \x01(\x05\x12\x18\n\x10\x63hunkserver_addr\x18\x03 \x01(\t\x12\r\n\x05start\x18\x04 \x01(\x03\x12\x0b\n\x03\x65nd\x18\x05 \x01(\x03\x12)\n\x06\x62locks\x18\x06 \x03(\x0b\x32\x19.lightdfs.ReportBlockInfo\x12\x11\n\treport_id\x18\x07 \x01(\x03\"\xbf\x01\n\x13\x42lockReportResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12\x17\n\x0fobsolete_blocks\x18\x03 \x03(\x03\x12\x14\n\x0c\x63lose_blocks\x18\x04 \x03(\x03\x12+\n\x0cnew_replicas\x18\x05 \x03(\x0b\x32\x15.lightdfs.ReplicaInfo\x12\x11\n\treport_id\x18\x06 \x01(\x03\"\x88\x01\n\x14\x42lockReceivedRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x16\n\x0e\x63hunkserver_id\x18\x02 \x01(\x05\x12\x18\n\x10\x63hunkserver_addr\x18\x03 \x01(\t\x12)\n\x06\x62locks\x18\x06 \x03(\x0b\x32\x19.lightdfs.ReportBlockInfo\"R\n\x15\x42lockReceivedResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"{\n\x16PushBlockReportRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x16\n\x0e\x63hunkserver_id\x18\x02 \x01(\x05\x12\x0e\n\x06\x62locks\x18\x03 \x03(\x03\x12$\n\x06status\x18\x04 \x03(\x0e\x32\x14.lightdfs.StatusCode\"T\n\x17PushBlockReportResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"#\n\x0eSysStatRequest\x12\x11\n\tstat_name\x18\x02 \x01(\t\"\x8e\x01\n\x0fSysStatResponse\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12/\n\x0c\x63hunkservers\x18\x03 \x03(\x0b\x32\x19.lightdfs.ChunkServerInfo\x12\x11\n\tblock_num\x18\x04 \x01(\x03\x12\x11\n\tdata_size\x18\x05 \x01(\x03\"6\n\nNsLogEntry\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x0b\n\x03key\x18\x02 \x01(\x0c\x12\r\n\x05value\x18\x03 \x01(\x0c\"6\n\rNameServerLog\x12%\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x14.lightdfs.NsLogEntry\"N\n\x1aShutdownChunkServerRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x1b\n\x13\x63hunkserver_address\x18\x02 \x03(\t\"X\n\x1bShutdownChunkServerResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"5\n\x1eShutdownChunkServerStatRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\"y\n\x1fShutdownChunkServerStatResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12\x1b\n\x13in_offline_progress\x18\x03 \x01(\x08\"5\n\x10\x44iskUsageRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"_\n\x11\x44iskUsageResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\x12\x0f\n\x07\x64u_size\x18\x03 \x01(\x04\"?\n\x0c\x43hmodRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04mode\x18\x02 \x01(\x05\x12\x0c\n\x04path\x18\x03 \x01(\t\"J\n\rChmodResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"M\n\x0eSymlinkRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0b\n\x03src\x18\x02 \x01(\t\x12\x0b\n\x03\x64st\x18\x03 \x01(\t\x12\x0c\n\x04user\x18\x04 \x01(\t\"L\n\x0fSymlinkResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"E\n\x0eLockDirRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x10\n\x08\x64ir_path\x18\x02 \x01(\t\x12\x0c\n\x04uuid\x18\x03 \x01(\t\"L\n\x0fLockDirResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode\"G\n\x10UnlockDirRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x10\n\x08\x64ir_path\x18\x02 \x01(\t\x12\x0c\n\x04uuid\x18\x03 \x01(\t\"N\n\x11UnlockDirResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12$\n\x06status\x18\x02 \x01(\x0e\x32\x14.lightdfs.StatusCode2\x8b\x0e\n\nNameServer\x12G\n\nCreateFile\x12\x1b.lightdfs.CreateFileRequest\x1a\x1c.lightdfs.CreateFileResponse\x12\x41\n\x08\x41\x64\x64\x42lock\x12\x19.lightdfs.AddBlockRequest\x1a\x1a.lightdfs.AddBlockResponse\x12P\n\x0fGetFileLocation\x12\x1d.lightdfs.FileLocationRequest\x1a\x1e.lightdfs.FileLocationResponse\x12P\n\rListDirectory\x12\x1e.lightdfs.ListDirectoryRequest\x1a\x1f.lightdfs.ListDirectoryResponse\x12\x35\n\x04Stat\x12\x15.lightdfs.StatRequest\x1a\x16.lightdfs.StatResponse\x12;\n\x06Rename\x12\x17.lightdfs.RenameRequest\x1a\x18.lightdfs.RenameResponse\x12\x44\n\tSyncBlock\x12\x1a.lightdfs.SyncBlockRequest\x1a\x1b.lightdfs.SyncBlockResponse\x12J\n\x0b\x46inishBlock\x12\x1c.lightdfs.FinishBlockRequest\x1a\x1d.lightdfs.FinishBlockResponse\x12;\n\x06Unlink\x12\x17.lightdfs.UnlinkRequest\x1a\x18.lightdfs.UnlinkResponse\x12V\n\x0f\x44\x65leteDirectory\x12 .lightdfs.DeleteDirectoryRequest\x1a!.lightdfs.DeleteDirectoryResponse\x12Y\n\x10\x43hangeReplicaNum\x12!.lightdfs.ChangeReplicaNumRequest\x1a\".lightdfs.ChangeReplicaNumResponse\x12\x62\n\x13ShutdownChunkServer\x12$.lightdfs.ShutdownChunkServerRequest\x1a%.lightdfs.ShutdownChunkServerResponse\x12n\n\x17ShutdownChunkServerStat\x12(.lightdfs.ShutdownChunkServerStatRequest\x1a).lightdfs.ShutdownChunkServerStatResponse\x12\x44\n\tDiskUsage\x12\x1a.lightdfs.DiskUsageRequest\x1a\x1b.lightdfs.DiskUsageResponse\x12\x41\n\x08Register\x12\x19.lightdfs.RegisterRequest\x1a\x1a.lightdfs.RegisterResponse\x12\x44\n\tHeartBeat\x12\x1a.lightdfs.HeartBeatRequest\x1a\x1b.lightdfs.HeartBeatResponse\x12J\n\x0b\x42lockReport\x12\x1c.lightdfs.BlockReportRequest\x1a\x1d.lightdfs.BlockReportResponse\x12P\n\rBlockReceived\x12\x1e.lightdfs.BlockReceivedRequest\x1a\x1f.lightdfs.BlockReceivedResponse\x12V\n\x0fPushBlockReport\x12 .lightdfs.PushBlockReportRequest\x1a!.lightdfs.PushBlockReportResponse\x12>\n\x07SysStat\x12\x18.lightdfs.SysStatRequest\x1a\x19.lightdfs.SysStatResponse\x12\x38\n\x05\x43hmod\x12\x16.lightdfs.ChmodRequest\x1a\x17.lightdfs.ChmodResponse\x12>\n\x07Symlink\x12\x18.lightdfs.SymlinkRequest\x1a\x19.lightdfs.SymlinkResponse\x12>\n\x07LockDir\x12\x18.lightdfs.LockDirRequest\x1a\x19.lightdfs.LockDirResponse\x12\x44\n\tUnlockDir\x12\x1a.lightdfs.UnlockDirRequest\x1a\x1b.lightdfs.UnlockDirResponseB\x03\x80\x01\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10nameserver.proto\x12\x08lightdfs\"%\n\x08response\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\"8\n\x0e\x64\x61taServerInfo\x12\x0c\n\x04uuid\x18\x01 \x01(\t\x12\n\n\x02ip\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\"\x12\n\x05\x65mpty\x12\t\n\x01\x65\x18\x01 \x01(\x05\"l\n\x19getDataServerListResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\x34\n\x12\x64\x61taServerInfoList\x18\x03 \x03(\x0b\x32\x18.lightdfs.dataServerInfo\"D\n\x0fRegisterRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\r\n\x05group\x18\x03 \x01(\t\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"a\n\x18setFilePermissionRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\x12\r\n\x05group\x18\x03 \x01(\t\x12\x12\n\npermission\x18\x04 \x01(\x05\"5\n\x0flockFileRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t\"7\n\x11unlockFileRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t2\x98\x04\n\nnameserver\x12\x42\n\x12registerDataServer\x12\x18.lightdfs.dataServerInfo\x1a\x12.lightdfs.response\x12I\n\x11getDataServerList\x12\x0f.lightdfs.empty\x1a#.lightdfs.getDataServerListResponse\x12@\n\x10logoutDataServer\x12\x18.lightdfs.dataServerInfo\x1a\x12.lightdfs.response\x12=\n\x0cregisterUser\x12\x19.lightdfs.RegisterRequest\x1a\x12.lightdfs.response\x12\x33\n\x05login\x12\x16.lightdfs.LoginRequest\x1a\x12.lightdfs.response\x12K\n\x11setFilePermission\x12\".lightdfs.setFilePermissionRequest\x1a\x12.lightdfs.response\x12\x39\n\x08lockFile\x12\x19.lightdfs.lockFileRequest\x1a\x12.lightdfs.response\x12=\n\nunlockFile\x12\x1b.lightdfs.unlockFileRequest\x1a\x12.lightdfs.responseb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'nameserver_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'\200\001\001'
-  _CHUNKSERVERINFO._serialized_start=62
-  _CHUNKSERVERINFO._serialized_end=590
-  _CREATEFILEREQUEST._serialized_start=592
-  _CREATEFILEREQUEST._serialized_end=715
-  _CREATEFILERESPONSE._serialized_start=717
-  _CREATEFILERESPONSE._serialized_end=796
-  _LOCATEDBLOCK._serialized_start=798
-  _LOCATEDBLOCK._serialized_end=909
-  _FILELOCATIONREQUEST._serialized_start=911
-  _FILELOCATIONREQUEST._serialized_end=1021
-  _FILELOCATIONRESPONSE._serialized_start=1023
-  _FILELOCATIONRESPONSE._serialized_end=1144
-  _LISTDIRECTORYREQUEST._serialized_start=1146
-  _LISTDIRECTORYREQUEST._serialized_end=1203
-  _LISTDIRECTORYRESPONSE._serialized_start=1205
-  _LISTDIRECTORYRESPONSE._serialized_end=1322
-  _STATREQUEST._serialized_start=1324
-  _STATREQUEST._serialized_end=1372
-  _STATRESPONSE._serialized_start=1374
-  _STATRESPONSE._serialized_end=1486
-  _RENAMEREQUEST._serialized_start=1488
-  _RENAMEREQUEST._serialized_end=1558
-  _RENAMERESPONSE._serialized_start=1560
-  _RENAMERESPONSE._serialized_end=1635
-  _ADDBLOCKREQUEST._serialized_start=1637
-  _ADDBLOCKREQUEST._serialized_end=1718
-  _ADDBLOCKRESPONSE._serialized_start=1720
-  _ADDBLOCKRESPONSE._serialized_end=1836
-  _SYNCBLOCKREQUEST._serialized_start=1838
-  _SYNCBLOCKREQUEST._serialized_end=1928
-  _SYNCBLOCKRESPONSE._serialized_start=1930
-  _SYNCBLOCKRESPONSE._serialized_end=2008
-  _FINISHBLOCKREQUEST._serialized_start=2011
-  _FINISHBLOCKREQUEST._serialized_end=2158
-  _FINISHBLOCKRESPONSE._serialized_start=2160
-  _FINISHBLOCKRESPONSE._serialized_end=2240
-  _UNLINKREQUEST._serialized_start=2242
-  _UNLINKREQUEST._serialized_end=2292
-  _UNLINKRESPONSE._serialized_start=2294
-  _UNLINKRESPONSE._serialized_end=2369
-  _DELETEDIRECTORYREQUEST._serialized_start=2371
-  _DELETEDIRECTORYREQUEST._serialized_end=2449
-  _DELETEDIRECTORYRESPONSE._serialized_start=2451
-  _DELETEDIRECTORYRESPONSE._serialized_end=2535
-  _CHANGEREPLICANUMREQUEST._serialized_start=2537
-  _CHANGEREPLICANUMREQUEST._serialized_end=2623
-  _CHANGEREPLICANUMRESPONSE._serialized_start=2625
-  _CHANGEREPLICANUMRESPONSE._serialized_end=2710
-  _HEARTBEATREQUEST._serialized_start=2713
-  _HEARTBEATREQUEST._serialized_end=3017
-  _HEARTBEATRESPONSE._serialized_start=3020
-  _HEARTBEATRESPONSE._serialized_end=3185
-  _REPORTBLOCKINFO._serialized_start=3187
-  _REPORTBLOCKINFO._serialized_end=3279
-  _REPLICAINFO._serialized_start=3281
-  _REPLICAINFO._serialized_end=3384
-  _REGISTERREQUEST._serialized_start=3386
-  _REGISTERREQUEST._serialized_end=3510
-  _REGISTERRESPONSE._serialized_start=3513
-  _REGISTERRESPONSE._serialized_end=3706
-  _BLOCKREPORTREQUEST._serialized_start=3709
-  _BLOCKREPORTREQUEST._serialized_end=3890
-  _BLOCKREPORTRESPONSE._serialized_start=3893
-  _BLOCKREPORTRESPONSE._serialized_end=4084
-  _BLOCKRECEIVEDREQUEST._serialized_start=4087
-  _BLOCKRECEIVEDREQUEST._serialized_end=4223
-  _BLOCKRECEIVEDRESPONSE._serialized_start=4225
-  _BLOCKRECEIVEDRESPONSE._serialized_end=4307
-  _PUSHBLOCKREPORTREQUEST._serialized_start=4309
-  _PUSHBLOCKREPORTREQUEST._serialized_end=4432
-  _PUSHBLOCKREPORTRESPONSE._serialized_start=4434
-  _PUSHBLOCKREPORTRESPONSE._serialized_end=4518
-  _SYSSTATREQUEST._serialized_start=4520
-  _SYSSTATREQUEST._serialized_end=4555
-  _SYSSTATRESPONSE._serialized_start=4558
-  _SYSSTATRESPONSE._serialized_end=4700
-  _NSLOGENTRY._serialized_start=4702
-  _NSLOGENTRY._serialized_end=4756
-  _NAMESERVERLOG._serialized_start=4758
-  _NAMESERVERLOG._serialized_end=4812
-  _SHUTDOWNCHUNKSERVERREQUEST._serialized_start=4814
-  _SHUTDOWNCHUNKSERVERREQUEST._serialized_end=4892
-  _SHUTDOWNCHUNKSERVERRESPONSE._serialized_start=4894
-  _SHUTDOWNCHUNKSERVERRESPONSE._serialized_end=4982
-  _SHUTDOWNCHUNKSERVERSTATREQUEST._serialized_start=4984
-  _SHUTDOWNCHUNKSERVERSTATREQUEST._serialized_end=5037
-  _SHUTDOWNCHUNKSERVERSTATRESPONSE._serialized_start=5039
-  _SHUTDOWNCHUNKSERVERSTATRESPONSE._serialized_end=5160
-  _DISKUSAGEREQUEST._serialized_start=5162
-  _DISKUSAGEREQUEST._serialized_end=5215
-  _DISKUSAGERESPONSE._serialized_start=5217
-  _DISKUSAGERESPONSE._serialized_end=5312
-  _CHMODREQUEST._serialized_start=5314
-  _CHMODREQUEST._serialized_end=5377
-  _CHMODRESPONSE._serialized_start=5379
-  _CHMODRESPONSE._serialized_end=5453
-  _SYMLINKREQUEST._serialized_start=5455
-  _SYMLINKREQUEST._serialized_end=5532
-  _SYMLINKRESPONSE._serialized_start=5534
-  _SYMLINKRESPONSE._serialized_end=5610
-  _LOCKDIRREQUEST._serialized_start=5612
-  _LOCKDIRREQUEST._serialized_end=5681
-  _LOCKDIRRESPONSE._serialized_start=5683
-  _LOCKDIRRESPONSE._serialized_end=5759
-  _UNLOCKDIRREQUEST._serialized_start=5761
-  _UNLOCKDIRREQUEST._serialized_end=5832
-  _UNLOCKDIRRESPONSE._serialized_start=5834
-  _UNLOCKDIRRESPONSE._serialized_end=5912
-  _NAMESERVER._serialized_start=5915
-  _NAMESERVER._serialized_end=7718
+  _RESPONSE._serialized_start=30
+  _RESPONSE._serialized_end=67
+  _DATASERVERINFO._serialized_start=69
+  _DATASERVERINFO._serialized_end=125
+  _EMPTY._serialized_start=127
+  _EMPTY._serialized_end=145
+  _GETDATASERVERLISTRESPONSE._serialized_start=147
+  _GETDATASERVERLISTRESPONSE._serialized_end=255
+  _REGISTERREQUEST._serialized_start=257
+  _REGISTERREQUEST._serialized_end=325
+  _LOGINREQUEST._serialized_start=327
+  _LOGINREQUEST._serialized_end=377
+  _SETFILEPERMISSIONREQUEST._serialized_start=379
+  _SETFILEPERMISSIONREQUEST._serialized_end=476
+  _LOCKFILEREQUEST._serialized_start=478
+  _LOCKFILEREQUEST._serialized_end=531
+  _UNLOCKFILEREQUEST._serialized_start=533
+  _UNLOCKFILEREQUEST._serialized_end=588
+  _NAMESERVER._serialized_start=591
+  _NAMESERVER._serialized_end=1127
 # @@protoc_insertion_point(module_scope)

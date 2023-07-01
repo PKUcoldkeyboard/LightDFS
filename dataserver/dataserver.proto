@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package lightdfs;
+
+service dataserver {
+  // 创建文件夹
+  rpc mkdir(mkdirRequest) returns (response) {}
+  // 查询当前目录
+  rpc ls(lsRequest) returns (lsResponse) {}
+  // 删除文件
+  rpc rm(rmRequest) returns (response) {}
+  // 上传文件
+  rpc upload(uploadRequest) returns (response) {}
+  // 下载文件
+  rpc download(downloadRequest) returns (downloadResponse) {}
+  // PWD
+  rpc pwd(pwdRequest) returns (pwdResponse) {}
+  // 同步
+  rpc sync(syncRequest) returns (response) {}
+}
+
+message response {
+  int32 code = 1;
+  string msg = 2;
+}
+
+message mkdirRequest { string path = 1; }
+
+message lsRequest { string path = 1; }
+
+message lsResponse {
+  repeated string files = 1;
+  repeated string dirs = 2;
+}
+
+message rmRequest { string path = 1; }
+
+message uploadRequest {
+  string path = 1;
+  bytes data = 2;
+}
+
+message downloadRequest { string path = 1; }
+
+message downloadResponse { bytes data = 1; }
+
+message pwdRequest { string path = 1; }
+
+message pwdResponse { string path = 1; }
+
+message syncRequest { string path = 1; }
+
+message syncResponse { string path = 1; }
