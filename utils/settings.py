@@ -21,4 +21,5 @@ DFS_SETTINGS = {
         "LOG_LEVEL": "INFO",
     },
     "ROOT": "/",
+    "REPLICATION": 3,
 }

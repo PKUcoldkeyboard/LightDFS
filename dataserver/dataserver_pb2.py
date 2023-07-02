@@ -13,37 +13,43 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x64\x61taserver.proto\x12\x08lightdfs\"%\n\x08response\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\"\x1c\n\x0cmkdirRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x19\n\tlsRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\")\n\nlsResponse\x12\r\n\x05\x66iles\x18\x01 \x03(\t\x12\x0c\n\x04\x64irs\x18\x02 \x03(\t\"\x19\n\trmRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"+\n\ruploadRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\x1f\n\x0f\x64ownloadRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\" \n\x10\x64ownloadResponse\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"\x1a\n\npwdRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1b\n\x0bpwdResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1b\n\x0bsyncRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1c\n\x0csyncResponse\x12\x0c\n\x04path\x18\x01 \x01(\t2\x90\x03\n\ndataserver\x12\x35\n\x05mkdir\x12\x16.lightdfs.mkdirRequest\x1a\x12.lightdfs.response\"\x00\x12\x31\n\x02ls\x12\x13.lightdfs.lsRequest\x1a\x14.lightdfs.lsResponse\"\x00\x12/\n\x02rm\x12\x13.lightdfs.rmRequest\x1a\x12.lightdfs.response\"\x00\x12\x37\n\x06upload\x12\x17.lightdfs.uploadRequest\x1a\x12.lightdfs.response\"\x00\x12\x43\n\x08\x64ownload\x12\x19.lightdfs.downloadRequest\x1a\x1a.lightdfs.downloadResponse\"\x00\x12\x34\n\x03pwd\x12\x14.lightdfs.pwdRequest\x1a\x15.lightdfs.pwdResponse\"\x00\x12\x33\n\x04sync\x12\x15.lightdfs.syncRequest\x1a\x12.lightdfs.response\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x64\x61taserver.proto\x12\x08lightdfs\"E\n\x0c\x42\x61seResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0f\n\x07success\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t\"6\n\x11\x43reateFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"4\n\x0fListFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"G\n\x10ListFileResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0f\n\x07success\x18\x02 \x01(\x05\x12\r\n\x05\x66iles\x18\x03 \x03(\t\"K\n\x16\x43reateDirectoryRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x0e\n\x06parent\x18\x04 \x01(\x08\"I\n\x11\x44\x65leteFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x03 \x01(\x08\"B\n\x11RenameFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0b\n\x03src\x18\x02 \x01(\t\x12\x0b\n\x03\x64st\x18\x03 \x01(\t\"4\n\x0fReadFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"I\n\x10ReadFileResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0f\n\x07success\x18\x02 \x01(\x05\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\"I\n\x10\x43hmodFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x12\n\npermission\x18\x03 \x01(\t\"9\n\x14LockDirectoryRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\";\n\x16UnlockDirectoryRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"G\n\x11UploadFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\x0c\"8\n\x13\x44ownloadFileRequest\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0c\n\x04path\x18\x02 \x01(\t\"M\n\x14\x44ownloadFileResponse\x12\x13\n\x0bsequence_id\x18\x01 \x01(\x03\x12\x0f\n\x07success\x18\x02 \x01(\x05\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\x0c\x32\xab\x06\n\nDataServer\x12\x43\n\nCreateFile\x12\x1b.lightdfs.CreateFileRequest\x1a\x16.lightdfs.BaseResponse\"\x00\x12\x43\n\x08ListFile\x12\x19.lightdfs.ListFileRequest\x1a\x1a.lightdfs.ListFileResponse\"\x00\x12M\n\x0f\x43reateDirectory\x12 .lightdfs.CreateDirectoryRequest\x1a\x16.lightdfs.BaseResponse\"\x00\x12\x43\n\nDeleteFile\x12\x1b.lightdfs.DeleteFileRequest\x1a\x16.lightdfs.BaseResponse\"\x00\x12\x43\n\nRenameFile\x12\x1b.lightdfs.RenameFileRequest\x1a\x16.lightdfs.BaseResponse\"\x00\x12\x43\n\x08ReadFile\x12\x19.lightdfs.ReadFileRequest\x1a\x1a.lightdfs.ReadFileResponse\"\x00\x12\x41\n\tChmodFile\x12\x1a.lightdfs.ChmodFileRequest\x1a\x16.lightdfs.BaseResponse\"\x00\x12I\n\rLockDirectory\x12\x1e.lightdfs.LockDirectoryRequest\x1a\x16.lightdfs.BaseResponse\"\x00\x12M\n\x0fUnlockDirectory\x12 .lightdfs.UnlockDirectoryRequest\x1a\x16.lightdfs.BaseResponse\"\x00\x12\x45\n\nUploadFile\x12\x1b.lightdfs.UploadFileRequest\x1a\x16.lightdfs.BaseResponse\"\x00(\x01\x12Q\n\x0c\x44ownloadFile\x12\x1d.lightdfs.DownloadFileRequest\x1a\x1e.lightdfs.DownloadFileResponse\"\x00\x30\x01\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'dataserver_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _RESPONSE._serialized_start=30
-  _RESPONSE._serialized_end=67
-  _MKDIRREQUEST._serialized_start=69
-  _MKDIRREQUEST._serialized_end=97
-  _LSREQUEST._serialized_start=99
-  _LSREQUEST._serialized_end=124
-  _LSRESPONSE._serialized_start=126
-  _LSRESPONSE._serialized_end=167
-  _RMREQUEST._serialized_start=169
-  _RMREQUEST._serialized_end=194
-  _UPLOADREQUEST._serialized_start=196
-  _UPLOADREQUEST._serialized_end=239
-  _DOWNLOADREQUEST._serialized_start=241
-  _DOWNLOADREQUEST._serialized_end=272
-  _DOWNLOADRESPONSE._serialized_start=274
-  _DOWNLOADRESPONSE._serialized_end=306
-  _PWDREQUEST._serialized_start=308
-  _PWDREQUEST._serialized_end=334
-  _PWDRESPONSE._serialized_start=336
-  _PWDRESPONSE._serialized_end=363
-  _SYNCREQUEST._serialized_start=365
-  _SYNCREQUEST._serialized_end=392
-  _SYNCRESPONSE._serialized_start=394
-  _SYNCRESPONSE._serialized_end=422
-  _DATASERVER._serialized_start=425
-  _DATASERVER._serialized_end=825
+  _BASERESPONSE._serialized_start=30
+  _BASERESPONSE._serialized_end=99
+  _CREATEFILEREQUEST._serialized_start=101
+  _CREATEFILEREQUEST._serialized_end=155
+  _LISTFILEREQUEST._serialized_start=157
+  _LISTFILEREQUEST._serialized_end=209
+  _LISTFILERESPONSE._serialized_start=211
+  _LISTFILERESPONSE._serialized_end=282
+  _CREATEDIRECTORYREQUEST._serialized_start=284
+  _CREATEDIRECTORYREQUEST._serialized_end=359
+  _DELETEFILEREQUEST._serialized_start=361
+  _DELETEFILEREQUEST._serialized_end=434
+  _RENAMEFILEREQUEST._serialized_start=436
+  _RENAMEFILEREQUEST._serialized_end=502
+  _READFILEREQUEST._serialized_start=504
+  _READFILEREQUEST._serialized_end=556
+  _READFILERESPONSE._serialized_start=558
+  _READFILERESPONSE._serialized_end=631
+  _CHMODFILEREQUEST._serialized_start=633
+  _CHMODFILEREQUEST._serialized_end=706
+  _LOCKDIRECTORYREQUEST._serialized_start=708
+  _LOCKDIRECTORYREQUEST._serialized_end=765
+  _UNLOCKDIRECTORYREQUEST._serialized_start=767
+  _UNLOCKDIRECTORYREQUEST._serialized_end=826
+  _UPLOADFILEREQUEST._serialized_start=828
+  _UPLOADFILEREQUEST._serialized_end=899
+  _DOWNLOADFILEREQUEST._serialized_start=901
+  _DOWNLOADFILEREQUEST._serialized_end=957
+  _DOWNLOADFILERESPONSE._serialized_start=959
+  _DOWNLOADFILERESPONSE._serialized_end=1036
+  _DATASERVER._serialized_start=1039
+  _DATASERVER._serialized_end=1850
 # @@protoc_insertion_point(module_scope)

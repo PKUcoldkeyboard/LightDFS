@@ -5,7 +5,7 @@ import grpc
 import dataserver_pb2 as dataserver__pb2
 
 
-class dataserverStub(object):
+class DataServerStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -14,145 +14,213 @@ class dataserverStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.mkdir = channel.unary_unary(
-                '/lightdfs.dataserver/mkdir',
-                request_serializer=dataserver__pb2.mkdirRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.response.FromString,
+        self.CreateFile = channel.unary_unary(
+                '/lightdfs.DataServer/CreateFile',
+                request_serializer=dataserver__pb2.CreateFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.ls = channel.unary_unary(
-                '/lightdfs.dataserver/ls',
-                request_serializer=dataserver__pb2.lsRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.lsResponse.FromString,
+        self.ListFile = channel.unary_unary(
+                '/lightdfs.DataServer/ListFile',
+                request_serializer=dataserver__pb2.ListFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.ListFileResponse.FromString,
                 )
-        self.rm = channel.unary_unary(
-                '/lightdfs.dataserver/rm',
-                request_serializer=dataserver__pb2.rmRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.response.FromString,
+        self.CreateDirectory = channel.unary_unary(
+                '/lightdfs.DataServer/CreateDirectory',
+                request_serializer=dataserver__pb2.CreateDirectoryRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.upload = channel.unary_unary(
-                '/lightdfs.dataserver/upload',
-                request_serializer=dataserver__pb2.uploadRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.response.FromString,
+        self.DeleteFile = channel.unary_unary(
+                '/lightdfs.DataServer/DeleteFile',
+                request_serializer=dataserver__pb2.DeleteFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.download = channel.unary_unary(
-                '/lightdfs.dataserver/download',
-                request_serializer=dataserver__pb2.downloadRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.downloadResponse.FromString,
+        self.RenameFile = channel.unary_unary(
+                '/lightdfs.DataServer/RenameFile',
+                request_serializer=dataserver__pb2.RenameFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.pwd = channel.unary_unary(
-                '/lightdfs.dataserver/pwd',
-                request_serializer=dataserver__pb2.pwdRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.pwdResponse.FromString,
+        self.ReadFile = channel.unary_unary(
+                '/lightdfs.DataServer/ReadFile',
+                request_serializer=dataserver__pb2.ReadFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.ReadFileResponse.FromString,
                 )
-        self.sync = channel.unary_unary(
-                '/lightdfs.dataserver/sync',
-                request_serializer=dataserver__pb2.syncRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.response.FromString,
+        self.ChmodFile = channel.unary_unary(
+                '/lightdfs.DataServer/ChmodFile',
+                request_serializer=dataserver__pb2.ChmodFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.LockDirectory = channel.unary_unary(
+                '/lightdfs.DataServer/LockDirectory',
+                request_serializer=dataserver__pb2.LockDirectoryRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.UnlockDirectory = channel.unary_unary(
+                '/lightdfs.DataServer/UnlockDirectory',
+                request_serializer=dataserver__pb2.UnlockDirectoryRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.UploadFile = channel.stream_unary(
+                '/lightdfs.DataServer/UploadFile',
+                request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.DownloadFile = channel.unary_stream(
+                '/lightdfs.DataServer/DownloadFile',
+                request_serializer=dataserver__pb2.DownloadFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.DownloadFileResponse.FromString,
                 )
 
 
-class dataserverServicer(object):
+class DataServerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def mkdir(self, request, context):
-        """创建文件夹
+    def CreateFile(self, request, context):
+        """创建文件，对应touch命令
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ls(self, request, context):
-        """查询当前目录
+    def ListFile(self, request, context):
+        """列出文件，对应ls命令
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def rm(self, request, context):
-        """删除文件
+    def CreateDirectory(self, request, context):
+        """创建文件夹，对应mkdir命令
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def upload(self, request, context):
+    def DeleteFile(self, request, context):
+        """删除文件，对应rm命令
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RenameFile(self, request, context):
+        """重命名或移动文件，对应mv命令
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ReadFile(self, request, context):
+        """读取文件，对应cat命令
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ChmodFile(self, request, context):
+        """chmod命令
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def LockDirectory(self, request, context):
+        """对文件夹上锁
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UnlockDirectory(self, request, context):
+        """解锁文件夹
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UploadFile(self, request_iterator, context):
         """上传文件
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def download(self, request, context):
+    def DownloadFile(self, request, context):
         """下载文件
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def pwd(self, request, context):
-        """PWD
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
 
-    def sync(self, request, context):
-        """同步
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-
-def add_dataserverServicer_to_server(servicer, server):
+def add_DataServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'mkdir': grpc.unary_unary_rpc_method_handler(
-                    servicer.mkdir,
-                    request_deserializer=dataserver__pb2.mkdirRequest.FromString,
-                    response_serializer=dataserver__pb2.response.SerializeToString,
+            'CreateFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateFile,
+                    request_deserializer=dataserver__pb2.CreateFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'ls': grpc.unary_unary_rpc_method_handler(
-                    servicer.ls,
-                    request_deserializer=dataserver__pb2.lsRequest.FromString,
-                    response_serializer=dataserver__pb2.lsResponse.SerializeToString,
+            'ListFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListFile,
+                    request_deserializer=dataserver__pb2.ListFileRequest.FromString,
+                    response_serializer=dataserver__pb2.ListFileResponse.SerializeToString,
             ),
-            'rm': grpc.unary_unary_rpc_method_handler(
-                    servicer.rm,
-                    request_deserializer=dataserver__pb2.rmRequest.FromString,
-                    response_serializer=dataserver__pb2.response.SerializeToString,
+            'CreateDirectory': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateDirectory,
+                    request_deserializer=dataserver__pb2.CreateDirectoryRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'upload': grpc.unary_unary_rpc_method_handler(
-                    servicer.upload,
-                    request_deserializer=dataserver__pb2.uploadRequest.FromString,
-                    response_serializer=dataserver__pb2.response.SerializeToString,
+            'DeleteFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteFile,
+                    request_deserializer=dataserver__pb2.DeleteFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'download': grpc.unary_unary_rpc_method_handler(
-                    servicer.download,
-                    request_deserializer=dataserver__pb2.downloadRequest.FromString,
-                    response_serializer=dataserver__pb2.downloadResponse.SerializeToString,
+            'RenameFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.RenameFile,
+                    request_deserializer=dataserver__pb2.RenameFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'pwd': grpc.unary_unary_rpc_method_handler(
-                    servicer.pwd,
-                    request_deserializer=dataserver__pb2.pwdRequest.FromString,
-                    response_serializer=dataserver__pb2.pwdResponse.SerializeToString,
+            'ReadFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.ReadFile,
+                    request_deserializer=dataserver__pb2.ReadFileRequest.FromString,
+                    response_serializer=dataserver__pb2.ReadFileResponse.SerializeToString,
             ),
-            'sync': grpc.unary_unary_rpc_method_handler(
-                    servicer.sync,
-                    request_deserializer=dataserver__pb2.syncRequest.FromString,
-                    response_serializer=dataserver__pb2.response.SerializeToString,
+            'ChmodFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.ChmodFile,
+                    request_deserializer=dataserver__pb2.ChmodFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'LockDirectory': grpc.unary_unary_rpc_method_handler(
+                    servicer.LockDirectory,
+                    request_deserializer=dataserver__pb2.LockDirectoryRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'UnlockDirectory': grpc.unary_unary_rpc_method_handler(
+                    servicer.UnlockDirectory,
+                    request_deserializer=dataserver__pb2.UnlockDirectoryRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'UploadFile': grpc.stream_unary_rpc_method_handler(
+                    servicer.UploadFile,
+                    request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'DownloadFile': grpc.unary_stream_rpc_method_handler(
+                    servicer.DownloadFile,
+                    request_deserializer=dataserver__pb2.DownloadFileRequest.FromString,
+                    response_serializer=dataserver__pb2.DownloadFileResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'lightdfs.dataserver', rpc_method_handlers)
+            'lightdfs.DataServer', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class dataserver(object):
+class DataServer(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def mkdir(request,
+    def CreateFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -162,14 +230,14 @@ class dataserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.dataserver/mkdir',
-            dataserver__pb2.mkdirRequest.SerializeToString,
-            dataserver__pb2.response.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/CreateFile',
+            dataserver__pb2.CreateFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def ls(request,
+    def ListFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -179,14 +247,14 @@ class dataserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.dataserver/ls',
-            dataserver__pb2.lsRequest.SerializeToString,
-            dataserver__pb2.lsResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ListFile',
+            dataserver__pb2.ListFileRequest.SerializeToString,
+            dataserver__pb2.ListFileResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def rm(request,
+    def CreateDirectory(request,
             target,
             options=(),
             channel_credentials=None,
@@ -196,14 +264,14 @@ class dataserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.dataserver/rm',
-            dataserver__pb2.rmRequest.SerializeToString,
-            dataserver__pb2.response.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/CreateDirectory',
+            dataserver__pb2.CreateDirectoryRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def upload(request,
+    def DeleteFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -213,14 +281,14 @@ class dataserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.dataserver/upload',
-            dataserver__pb2.uploadRequest.SerializeToString,
-            dataserver__pb2.response.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/DeleteFile',
+            dataserver__pb2.DeleteFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def download(request,
+    def RenameFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -230,14 +298,14 @@ class dataserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.dataserver/download',
-            dataserver__pb2.downloadRequest.SerializeToString,
-            dataserver__pb2.downloadResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/RenameFile',
+            dataserver__pb2.RenameFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def pwd(request,
+    def ReadFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -247,14 +315,14 @@ class dataserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.dataserver/pwd',
-            dataserver__pb2.pwdRequest.SerializeToString,
-            dataserver__pb2.pwdResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ReadFile',
+            dataserver__pb2.ReadFileRequest.SerializeToString,
+            dataserver__pb2.ReadFileResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def sync(request,
+    def ChmodFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -264,8 +332,76 @@ class dataserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.dataserver/sync',
-            dataserver__pb2.syncRequest.SerializeToString,
-            dataserver__pb2.response.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ChmodFile',
+            dataserver__pb2.ChmodFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def LockDirectory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/LockDirectory',
+            dataserver__pb2.LockDirectoryRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UnlockDirectory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/UnlockDirectory',
+            dataserver__pb2.UnlockDirectoryRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UploadFile(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/UploadFile',
+            dataserver__pb2.UploadFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DownloadFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/lightdfs.DataServer/DownloadFile',
+            dataserver__pb2.DownloadFileRequest.SerializeToString,
+            dataserver__pb2.DownloadFileResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

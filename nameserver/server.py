@@ -1,2 +1,2 @@
 import grpc
-from utils.config import Config
+from utils.settings import Config
