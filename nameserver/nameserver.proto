@@ -16,7 +16,7 @@ service NameServer
     rpc Login(LoginRequest) returns (Response);
     // 登出
     rpc Logout(LogoutRequest) returns (Response);
-    // 文件锁
+    // 文件锁，lock_type: 0:读锁，1:写锁
     rpc LockFile(LockFileRequest) returns (Response);
     rpc UnlockFile(UnlockFileRequest) returns (Response);
     // 检查缓存
@@ -77,13 +77,15 @@ message LogoutRequest
 message LockFileRequest
 {
     string username = 1;
-    string filepath = 2;
+    int32 lock_type = 2;
+    string filepath = 3;
 }
 
 message UnlockFileRequest
 {
     string username = 1;
-    string filepath = 2;
+    int32 lock_type = 2;
+    string filepath = 3;
 }
 
 
