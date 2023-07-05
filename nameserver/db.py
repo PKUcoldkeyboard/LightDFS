@@ -1,5 +1,4 @@
 import leveldb
-import snowflake
 import pickle
 import bcrypt
 import sys
