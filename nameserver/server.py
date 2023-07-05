@@ -38,7 +38,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
                                data_server_list=self.DataServerList)
 
     def LogoutDataServer(self, request, context):
-        self.DataServerList = list(filter(lambda x: x.id != request.id, self.DataServerList))
+        self.DataServerList = list(filter(lambda x: x.did != request.id, self.DataServerList))
         self.logger.info(f"DataServer {request.id} is offline")
         return ns_pb2.Response(success=1, message="Logout successfully!")
 
