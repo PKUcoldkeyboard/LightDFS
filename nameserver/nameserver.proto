@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package lightdfs;
 
-service nameserver
+service Nameserver
 {
     // 注册数据服务器
     rpc RegisterDataServer(DataServerInfo) returns (Response);
