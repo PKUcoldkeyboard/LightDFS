@@ -26,6 +26,14 @@ service DataServer
     rpc UploadFile(stream UploadFileRequest) returns (BaseResponse) {}
     // 下载文件
     rpc DownloadFile(DownloadFileRequest) returns (stream DownloadFileResponse) {}
+    // 复制文件或文件夹
+    rpc CopyFile(CopyFileRequest) returns (BaseResponse) {}
+    // 更改文件或文件夹的拥有者
+    rpc ChownFile(ChownFileRequest) returns (BaseResponse) {}
+    // 改变文件或文件夹的组
+    rpc ChangeGroup(ChangeGroupRequest) returns (BaseResponse) {}
+    // 获取文件或目录的详细信息
+    rpc GetFileInfo(GetFileInfoRequest) returns (GetFileInfoResponse) {}
 }
 
 message BaseResponse
@@ -38,8 +46,8 @@ message BaseResponse
 
 message CreateFileRequest
 {
-    int64 sequence_id        = 1;
-    string path              = 2;
+    int64 sequence_id = 1;
+    string path       = 2;
 }
 
 message ListFileRequest
@@ -57,9 +65,9 @@ message ListFileResponse
 
 message CreateDirectoryRequest
 {
-    int64 sequence_id        = 1;
-    string path              = 2;
-    bool parent              = 4;
+    int64 sequence_id = 1;
+    string path       = 2;
+    bool parent       = 4;
 }
 
 message DeleteFileRequest
@@ -126,4 +134,52 @@ message DownloadFileResponse
     int64 sequence_id = 1;
     int32 success     = 2;
     bytes content     = 3;
+}
+
+message CopyFileRequest
+{
+    int64 sequence_id = 1;
+    string src        = 2;
+    string dst        = 3;
+}
+
+message ChownFileRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+    string owner      = 3;
+}
+
+message ChangeGroupRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+    string group      = 3;
+}
+
+message GetFileInfoRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+}
+
+message FileInfo
+{
+    int64 fid         = 1;
+    string name       = 2;
+    string path       = 3;
+    string owner      = 4;
+    string group      = 5;
+    string permission = 6;
+    int64 size        = 7;
+    int64 ctime       = 8;
+    int64 mtime       = 9;
+    bool mode         = 10;
+}
+
+message GetFileInfoResponse
+{
+    int64 sequence_id = 1;
+    int32 success     = 2;
+    FileInfo info     = 3;
 }

@@ -8,6 +8,7 @@ import re
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models import User, Group, File, DataServer
 from utils.settings import DFS_SETTINGS
+from utils.snowflake import getId
 
 nameserver_data_dir = DFS_SETTINGS['NAMESERVER']['DATA_DIR']
 
@@ -132,7 +133,7 @@ def create_file(name, size, owner, groups, mode, location):
     if len(name) == 0 or len(name) > 255:
         raise ValueError('filename length must be between 1 and 255')
 
-    fid = snowflake.generate_id()
+    fid = getId()
     if mode == 0:
         permission = '666'
     elif mode == 1:

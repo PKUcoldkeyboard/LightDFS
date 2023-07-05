@@ -1,6 +1,7 @@
 import grpc
 import os
 import sys
+import re
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import dataserver_pb2_grpc as ds_grpc
 import dataserver_pb2 as ds_pb2
@@ -102,6 +103,24 @@ class DataServerServicer(ds_grpc.DataServerServicer):
             return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
         
         return ds_pb2.BaseResponse(success=1, message='Create directory successfully! ', sequence_id=request.sequence_id)
+    
+    
+    def RenameFile(self, request, context):
+        self.logger.info(f"mv {request.src} {request.dst} - {request.sequence_id}")
+        src = f'{self.data_dir}{request.src}'
+        dst = f'{self.data_dir}{request.dst}'
+        # 判断文件是否存在
+        if not os.path.exists(src) or not os.path.exists(os.path.dirname(dst)):
+            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
+        
+        try:
+            os.rename(src, dst)
+        except Exception as e:
+            self.logger.error(e)
+            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
+        
+        return ds_pb2.BaseResponse(success=1, message='Rename file successfully! ', sequence_id=request.sequence_id)
+        
 
 def start_server():
     host = DFS_SETTINGS['DATASERVER']['HOST']

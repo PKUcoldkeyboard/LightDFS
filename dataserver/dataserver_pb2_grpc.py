@@ -69,6 +69,26 @@ class DataServerStub(object):
                 request_serializer=dataserver__pb2.DownloadFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.DownloadFileResponse.FromString,
                 )
+        self.CopyFile = channel.unary_unary(
+                '/lightdfs.DataServer/CopyFile',
+                request_serializer=dataserver__pb2.CopyFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.ChownFile = channel.unary_unary(
+                '/lightdfs.DataServer/ChownFile',
+                request_serializer=dataserver__pb2.ChownFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.ChangeGroup = channel.unary_unary(
+                '/lightdfs.DataServer/ChangeGroup',
+                request_serializer=dataserver__pb2.ChangeGroupRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.GetFileInfo = channel.unary_unary(
+                '/lightdfs.DataServer/GetFileInfo',
+                request_serializer=dataserver__pb2.GetFileInfoRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.GetFileInfoResponse.FromString,
+                )
 
 
 class DataServerServicer(object):
@@ -151,6 +171,34 @@ class DataServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CopyFile(self, request, context):
+        """复制文件或文件夹
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ChownFile(self, request, context):
+        """更改文件或文件夹的拥有者
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ChangeGroup(self, request, context):
+        """改变文件或文件夹的组
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetFileInfo(self, request, context):
+        """获取文件或目录的详细信息
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DataServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -208,6 +256,26 @@ def add_DataServerServicer_to_server(servicer, server):
                     servicer.DownloadFile,
                     request_deserializer=dataserver__pb2.DownloadFileRequest.FromString,
                     response_serializer=dataserver__pb2.DownloadFileResponse.SerializeToString,
+            ),
+            'CopyFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.CopyFile,
+                    request_deserializer=dataserver__pb2.CopyFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'ChownFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.ChownFile,
+                    request_deserializer=dataserver__pb2.ChownFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'ChangeGroup': grpc.unary_unary_rpc_method_handler(
+                    servicer.ChangeGroup,
+                    request_deserializer=dataserver__pb2.ChangeGroupRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'GetFileInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetFileInfo,
+                    request_deserializer=dataserver__pb2.GetFileInfoRequest.FromString,
+                    response_serializer=dataserver__pb2.GetFileInfoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -403,5 +471,73 @@ class DataServer(object):
         return grpc.experimental.unary_stream(request, target, '/lightdfs.DataServer/DownloadFile',
             dataserver__pb2.DownloadFileRequest.SerializeToString,
             dataserver__pb2.DownloadFileResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CopyFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/CopyFile',
+            dataserver__pb2.CopyFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ChownFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ChownFile',
+            dataserver__pb2.ChownFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ChangeGroup(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ChangeGroup',
+            dataserver__pb2.ChangeGroupRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetFileInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/GetFileInfo',
+            dataserver__pb2.GetFileInfoRequest.SerializeToString,
+            dataserver__pb2.GetFileInfoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
