@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10nameserver.proto\x12\x08lightdfs\",\n\x08Response\x12\x0f\n\x07success\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t\"8\n\x0e\x44\x61taServerInfo\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0c\n\x04host\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\"\x12\n\x05\x65mpty\x12\t\n\x01\x65\x18\x01 \x01(\x05\"l\n\x19GetDataServerListResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\x34\n\x12\x64\x61taServerInfoList\x18\x03 \x03(\x0b\x32\x18.lightdfs.DataServerInfo\"D\n\x0fRegisterRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\r\n\x05group\x18\x03 \x01(\t\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"!\n\rLogoutRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"5\n\x0fLockFileRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t\"7\n\x11UnlockFileRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t\"8\n\x11\x43heckCacheRequest\x12\x10\n\x08\x66ilepath\x18\x01 \x01(\t\x12\x11\n\ttimestamp\x18\x02 \x01(\t\"+\n\x12GetFileInfoRequest\x12\x15\n\rabsolute_path\x18\x01 \x01(\t\"]\n\x08\x46ileInfo\x12\x15\n\rabsolute_path\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x03\x12\x0e\n\x06is_dir\x18\x03 \x01(\x08\x12\r\n\x05\x63time\x18\x04 \x01(\x03\x12\r\n\x05mtime\x18\x05 \x01(\x03\"*\n\x11\x44\x65leteFileRequest\x12\x15\n\rabsolute_path\x18\x01 \x01(\t\"j\n\x11ModifyFileRequest\x12\x19\n\x11old_absolute_path\x18\x01 \x01(\t\x12\x19\n\x11new_absolute_path\x18\x02 \x01(\t\x12\x10\n\x08new_size\x18\x03 \x01(\x03\x12\r\n\x05mtime\x18\x04 \x01(\x03\x32\xaa\x06\n\nNameServer\x12\x42\n\x12RegisterDataServer\x12\x18.lightdfs.DataServerInfo\x1a\x12.lightdfs.Response\x12I\n\x11GetDataServerList\x12\x0f.lightdfs.empty\x1a#.lightdfs.GetDataServerListResponse\x12@\n\x10LogoutDataServer\x12\x18.lightdfs.DataServerInfo\x1a\x12.lightdfs.Response\x12=\n\x0cRegisterUser\x12\x19.lightdfs.RegisterRequest\x1a\x12.lightdfs.Response\x12\x33\n\x05Login\x12\x16.lightdfs.LoginRequest\x1a\x12.lightdfs.Response\x12\x35\n\x06Logout\x12\x17.lightdfs.LogoutRequest\x1a\x12.lightdfs.Response\x12\x39\n\x08LockFile\x12\x19.lightdfs.LockFileRequest\x1a\x12.lightdfs.Response\x12=\n\nUnlockFile\x12\x1b.lightdfs.UnlockFileRequest\x1a\x12.lightdfs.Response\x12=\n\nCheckCache\x12\x1b.lightdfs.CheckCacheRequest\x1a\x12.lightdfs.Response\x12\x31\n\x07\x41\x64\x64\x46ile\x12\x12.lightdfs.FileInfo\x1a\x12.lightdfs.Response\x12=\n\nDeleteFile\x12\x1b.lightdfs.DeleteFileRequest\x1a\x12.lightdfs.Response\x12\x34\n\nModifyFile\x12\x12.lightdfs.FileInfo\x1a\x12.lightdfs.Response\x12?\n\x0bGetFileInfo\x12\x1c.lightdfs.GetFileInfoRequest\x1a\x12.lightdfs.FileInfob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10nameserver.proto\x12\x08lightdfs\",\n\x08Response\x12\x0f\n\x07success\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t\"8\n\x0e\x44\x61taServerInfo\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0c\n\x04host\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\"\x12\n\x05\x65mpty\x12\t\n\x01\x65\x18\x01 \x01(\x05\"s\n\x19GetDataServerListResponse\x12\x0f\n\x07success\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x34\n\x12\x64\x61taServerInfoList\x18\x03 \x03(\x0b\x32\x18.lightdfs.DataServerInfo\"5\n\x0fRegisterRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"!\n\rLogoutRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"5\n\x0fLockFileRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t\"7\n\x11UnlockFileRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08\x66ilepath\x18\x02 \x01(\t\"8\n\x11\x43heckCacheRequest\x12\x10\n\x08\x66ilepath\x18\x01 \x01(\t\x12\x11\n\ttimestamp\x18\x02 \x01(\t\"+\n\x12GetFileInfoRequest\x12\x15\n\rabsolute_path\x18\x01 \x01(\t\"]\n\x08\x46ileInfo\x12\x15\n\rabsolute_path\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x03\x12\x0e\n\x06is_dir\x18\x03 \x01(\x08\x12\r\n\x05\x63time\x18\x04 \x01(\x03\x12\r\n\x05mtime\x18\x05 \x01(\x03\"&\n\rDeleteRequest\x12\x15\n\rabsolute_path\x18\x01 \x01(\t\"j\n\x11ModifyFileRequest\x12\x19\n\x11old_absolute_path\x18\x01 \x01(\t\x12\x19\n\x11new_absolute_path\x18\x02 \x01(\t\x12\x10\n\x08new_size\x18\x03 \x01(\x03\x12\r\n\x05mtime\x18\x04 \x01(\x03\x32\xa6\x06\n\nNameServer\x12\x42\n\x12RegisterDataServer\x12\x18.lightdfs.DataServerInfo\x1a\x12.lightdfs.Response\x12I\n\x11GetDataServerList\x12\x0f.lightdfs.empty\x1a#.lightdfs.GetDataServerListResponse\x12@\n\x10LogoutDataServer\x12\x18.lightdfs.DataServerInfo\x1a\x12.lightdfs.Response\x12=\n\x0cRegisterUser\x12\x19.lightdfs.RegisterRequest\x1a\x12.lightdfs.Response\x12\x33\n\x05Login\x12\x16.lightdfs.LoginRequest\x1a\x12.lightdfs.Response\x12\x35\n\x06Logout\x12\x17.lightdfs.LogoutRequest\x1a\x12.lightdfs.Response\x12\x39\n\x08LockFile\x12\x19.lightdfs.LockFileRequest\x1a\x12.lightdfs.Response\x12=\n\nUnlockFile\x12\x1b.lightdfs.UnlockFileRequest\x1a\x12.lightdfs.Response\x12=\n\nCheckCache\x12\x1b.lightdfs.CheckCacheRequest\x1a\x12.lightdfs.Response\x12\x31\n\x07\x41\x64\x64\x46ile\x12\x12.lightdfs.FileInfo\x1a\x12.lightdfs.Response\x12\x39\n\nDeleteFile\x12\x17.lightdfs.DeleteRequest\x1a\x12.lightdfs.Response\x12\x34\n\nModifyFile\x12\x12.lightdfs.FileInfo\x1a\x12.lightdfs.Response\x12?\n\x0bGetFileInfo\x12\x1c.lightdfs.GetFileInfoRequest\x1a\x12.lightdfs.FileInfob\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'nameserver_pb2', globals())
@@ -27,27 +27,27 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _EMPTY._serialized_start=134
   _EMPTY._serialized_end=152
   _GETDATASERVERLISTRESPONSE._serialized_start=154
-  _GETDATASERVERLISTRESPONSE._serialized_end=262
-  _REGISTERREQUEST._serialized_start=264
-  _REGISTERREQUEST._serialized_end=332
-  _LOGINREQUEST._serialized_start=334
-  _LOGINREQUEST._serialized_end=384
-  _LOGOUTREQUEST._serialized_start=386
-  _LOGOUTREQUEST._serialized_end=419
-  _LOCKFILEREQUEST._serialized_start=421
-  _LOCKFILEREQUEST._serialized_end=474
-  _UNLOCKFILEREQUEST._serialized_start=476
-  _UNLOCKFILEREQUEST._serialized_end=531
-  _CHECKCACHEREQUEST._serialized_start=533
-  _CHECKCACHEREQUEST._serialized_end=589
-  _GETFILEINFOREQUEST._serialized_start=591
-  _GETFILEINFOREQUEST._serialized_end=634
-  _FILEINFO._serialized_start=636
-  _FILEINFO._serialized_end=729
-  _DELETEFILEREQUEST._serialized_start=731
-  _DELETEFILEREQUEST._serialized_end=773
-  _MODIFYFILEREQUEST._serialized_start=775
-  _MODIFYFILEREQUEST._serialized_end=881
-  _NAMESERVER._serialized_start=884
-  _NAMESERVER._serialized_end=1694
+  _GETDATASERVERLISTRESPONSE._serialized_end=269
+  _REGISTERREQUEST._serialized_start=271
+  _REGISTERREQUEST._serialized_end=324
+  _LOGINREQUEST._serialized_start=326
+  _LOGINREQUEST._serialized_end=376
+  _LOGOUTREQUEST._serialized_start=378
+  _LOGOUTREQUEST._serialized_end=411
+  _LOCKFILEREQUEST._serialized_start=413
+  _LOCKFILEREQUEST._serialized_end=466
+  _UNLOCKFILEREQUEST._serialized_start=468
+  _UNLOCKFILEREQUEST._serialized_end=523
+  _CHECKCACHEREQUEST._serialized_start=525
+  _CHECKCACHEREQUEST._serialized_end=581
+  _GETFILEINFOREQUEST._serialized_start=583
+  _GETFILEINFOREQUEST._serialized_end=626
+  _FILEINFO._serialized_start=628
+  _FILEINFO._serialized_end=721
+  _DELETEREQUEST._serialized_start=723
+  _DELETEREQUEST._serialized_end=761
+  _MODIFYFILEREQUEST._serialized_start=763
+  _MODIFYFILEREQUEST._serialized_end=869
+  _NAMESERVER._serialized_start=872
+  _NAMESERVER._serialized_end=1678
 # @@protoc_insertion_point(module_scope)

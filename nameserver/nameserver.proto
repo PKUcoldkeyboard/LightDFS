@@ -24,7 +24,7 @@ service NameServer
     // 添加新文件（夹）,提供完整文件信息
     rpc AddFile(FileInfo) returns (Response);
     // 删除文件（夹），提供文件路径
-    rpc DeleteFile(DeleteFileRequest) returns (Response);
+    rpc DeleteFile(DeleteRequest) returns (Response);
     // 修改文件（夹），提供原始文件路径，新文件路径，新文件大小，修改时间
     rpc ModifyFile(FileInfo) returns (Response);
     // 获取文件信息， 提供文件路径
@@ -51,8 +51,8 @@ message empty
 
 message GetDataServerListResponse
 {
-    int32 code                                 = 1;
-    string msg                                 = 2;
+    int32 success                              = 1;
+    string message                             = 2;
     repeated DataServerInfo dataServerInfoList = 3;
 }
 
@@ -60,7 +60,6 @@ message RegisterRequest
 {
     string username = 1;
     string password = 2;
-    string group    = 3;
 }
 
 message LoginRequest
@@ -109,7 +108,7 @@ message FileInfo
     int64 mtime          = 5;
 }
 
-message DeleteFileRequest
+message DeleteRequest
 {
     string absolute_path = 1;
 }

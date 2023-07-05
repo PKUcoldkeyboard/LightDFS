@@ -8,6 +8,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.logger import configure_logger
 from models import DataServer
+import db
 
 class NameServerServicer(ns_pb2_grpc.NameServerServicer):
     def __init__(self, host, port):
@@ -31,6 +32,19 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         self.DataServerList.append(DataServer(request.id, request.host, request.port))
         self.logger.info(f"DataServer {request.id} is online")
         return ns_pb2.Response(success=1, message="Register successfully!")
+
+    def GetDataServerList(self, request, context):
+        return ns_pb2.GetDataServerListResponse(success=1, message="Get DataServer list successfully!",
+                               data_server_list=self.DataServerList)
+
+    def LogoutDataServer(self, request, context):
+        self.DataServerList = list(filter(lambda x: x.id != request.id, self.DataServerList))
+        self.logger.info(f"DataServer {request.id} is offline")
+        return ns_pb2.Response(success=1, message="Logout successfully!")
+
+    def RegisterUser(self, request, context):
+        success, message = db.register_user(request.username, request.password)
+        return ns_pb2.Response(success=success, message=message)
 
 if __name__ == "__main__":
     host = "localhost"

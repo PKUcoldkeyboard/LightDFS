@@ -66,7 +66,7 @@ class NameServerStub(object):
                 )
         self.DeleteFile = channel.unary_unary(
                 '/lightdfs.NameServer/DeleteFile',
-                request_serializer=nameserver__pb2.DeleteFileRequest.SerializeToString,
+                request_serializer=nameserver__pb2.DeleteRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.ModifyFile = channel.unary_unary(
@@ -229,7 +229,7 @@ def add_NameServerServicer_to_server(servicer, server):
             ),
             'DeleteFile': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteFile,
-                    request_deserializer=nameserver__pb2.DeleteFileRequest.FromString,
+                    request_deserializer=nameserver__pb2.DeleteRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
             'ModifyFile': grpc.unary_unary_rpc_method_handler(
@@ -434,7 +434,7 @@ class NameServer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/DeleteFile',
-            nameserver__pb2.DeleteFileRequest.SerializeToString,
+            nameserver__pb2.DeleteRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
