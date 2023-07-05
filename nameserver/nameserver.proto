@@ -21,6 +21,14 @@ service NameServer
     rpc UnlockFile(UnlockFileRequest) returns (Response);
     // 检查缓存
     rpc CheckCache(CheckCacheRequest) returns (Response);
+    // 添加新文件（夹）,提供完整文件信息
+    rpc AddFile(FileInfo) returns (Response);
+    // 删除文件（夹），提供文件路径
+    rpc DeleteFile(DeleteFileRequest) returns (Response);
+    // 修改文件（夹），提供原始文件路径，新文件路径，新文件大小，修改时间
+    rpc ModifyFile(FileInfo) returns (Response);
+    // 获取文件信息， 提供文件路径
+    rpc GetFileInfo(GetFileInfoRequest) returns (FileInfo);
 }
 
 message Response
@@ -89,27 +97,27 @@ message CheckCacheRequest
 
 message GetFileInfoRequest
 {
-    int64 sequence_id = 1;
-    string path       = 2;
+    string absolute_path = 1;
 }
 
 message FileInfo
 {
-    int64 fid         = 1;
-    string name       = 2;
-    string path       = 3;
-    string owner      = 4;
-    string group      = 5;
-    string permission = 6;
-    int64 size        = 7;
-    int64 ctime       = 8;
-    int64 mtime       = 9;
-    bool mode         = 10;
+    string absolute_path = 1;
+    int64 size           = 2;
+    bool is_dir          = 3;
+    int64 ctime          = 4;
+    int64 mtime          = 5;
 }
 
-message GetFileInfoResponse
+message DeleteFileRequest
 {
-    int64 sequence_id = 1;
-    int32 success     = 2;
-    FileInfo info     = 3;
+    string absolute_path = 1;
+}
+
+message ModifyFileRequest
+{
+    string old_absolute_path = 1;
+    string new_absolute_path = 2;
+    int64 new_size           = 3;
+    int64 mtime              = 4;
 }

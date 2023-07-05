@@ -59,6 +59,26 @@ class NameServerStub(object):
                 request_serializer=nameserver__pb2.CheckCacheRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
+        self.AddFile = channel.unary_unary(
+                '/lightdfs.NameServer/AddFile',
+                request_serializer=nameserver__pb2.FileInfo.SerializeToString,
+                response_deserializer=nameserver__pb2.Response.FromString,
+                )
+        self.DeleteFile = channel.unary_unary(
+                '/lightdfs.NameServer/DeleteFile',
+                request_serializer=nameserver__pb2.DeleteFileRequest.SerializeToString,
+                response_deserializer=nameserver__pb2.Response.FromString,
+                )
+        self.ModifyFile = channel.unary_unary(
+                '/lightdfs.NameServer/ModifyFile',
+                request_serializer=nameserver__pb2.FileInfo.SerializeToString,
+                response_deserializer=nameserver__pb2.Response.FromString,
+                )
+        self.GetFileInfo = channel.unary_unary(
+                '/lightdfs.NameServer/GetFileInfo',
+                request_serializer=nameserver__pb2.GetFileInfoRequest.SerializeToString,
+                response_deserializer=nameserver__pb2.FileInfo.FromString,
+                )
 
 
 class NameServerServicer(object):
@@ -126,6 +146,34 @@ class NameServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AddFile(self, request, context):
+        """添加新文件（夹）,提供完整文件信息
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteFile(self, request, context):
+        """删除文件（夹），提供文件路径
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ModifyFile(self, request, context):
+        """修改文件（夹），提供原始文件路径，新文件路径，新文件大小，修改时间
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetFileInfo(self, request, context):
+        """获取文件信息， 提供文件路径
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_NameServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -173,6 +221,26 @@ def add_NameServerServicer_to_server(servicer, server):
                     servicer.CheckCache,
                     request_deserializer=nameserver__pb2.CheckCacheRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
+            ),
+            'AddFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddFile,
+                    request_deserializer=nameserver__pb2.FileInfo.FromString,
+                    response_serializer=nameserver__pb2.Response.SerializeToString,
+            ),
+            'DeleteFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteFile,
+                    request_deserializer=nameserver__pb2.DeleteFileRequest.FromString,
+                    response_serializer=nameserver__pb2.Response.SerializeToString,
+            ),
+            'ModifyFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.ModifyFile,
+                    request_deserializer=nameserver__pb2.FileInfo.FromString,
+                    response_serializer=nameserver__pb2.Response.SerializeToString,
+            ),
+            'GetFileInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetFileInfo,
+                    request_deserializer=nameserver__pb2.GetFileInfoRequest.FromString,
+                    response_serializer=nameserver__pb2.FileInfo.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -334,5 +402,73 @@ class NameServer(object):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/CheckCache',
             nameserver__pb2.CheckCacheRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/AddFile',
+            nameserver__pb2.FileInfo.SerializeToString,
+            nameserver__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/DeleteFile',
+            nameserver__pb2.DeleteFileRequest.SerializeToString,
+            nameserver__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ModifyFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/ModifyFile',
+            nameserver__pb2.FileInfo.SerializeToString,
+            nameserver__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetFileInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/GetFileInfo',
+            nameserver__pb2.GetFileInfoRequest.SerializeToString,
+            nameserver__pb2.FileInfo.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
