@@ -2,80 +2,83 @@ syntax = "proto3";
 
 package lightdfs;
 
-service nameserver
-{
-    // 注册数据服务器
-    rpc registerDataServer(dataServerInfo) returns (response);
-    // 获取数据服务器列表
-    rpc getDataServerList(empty) returns (getDataServerListResponse);
-    // 下线数据服务器
-    rpc logoutDataServer(dataServerInfo) returns (response);
-    // 注册用户
-    rpc registerUser(RegisterRequest) returns (response);
-    // 登录
-    rpc login(LoginRequest) returns (response);
-    // 设置文件权限
-    rpc setFilePermission(setFilePermissionRequest) returns (response);
-    // 文件锁
-    rpc lockFile(lockFileRequest) returns (response);
-    rpc unlockFile(unlockFileRequest) returns (response);
+service nameserver {
+  // 注册数据服务器
+  rpc registerDataServer(dataServerInfo) returns (response);
+  // 获取数据服务器列表
+  rpc getDataServerList(empty) returns (getDataServerListResponse);
+  // 下线数据服务器
+  rpc logoutDataServer(dataServerInfo) returns (response);
+  // 注册用户
+  rpc registerUser(RegisterRequest) returns (response);
+  // 登录
+  rpc login(LoginRequest) returns (response);
+  // 设置文件权限
+  rpc setFilePermission(setFilePermissionRequest) returns (response);
+  // 文件锁
+  rpc lockFile(lockFileRequest) returns (response);
+  rpc unlockFile(unlockFileRequest) returns (response);
+  // 检查文件权限
+  rpc checkFilePermission(checkFilePermissionRequest) returns (response);
+  // 检查缓存
+  rpc checkCache(checkCacheRequest) returns (response);
 }
 
-message response
-{
-    int32 code = 1;
-    string msg = 2;
+
+message response {
+  int32 code = 1;
+  string msg = 2;
 }
 
-message dataServerInfo
-{
-    // 使用uuid
-    string uuid = 1;
-    string ip   = 2;
-    int32 port  = 3;
+message dataServerInfo {
+  // 使用uuid
+  string uuid = 1;
+  string ip = 2;
+  int32 port = 3;
 }
 
-message empty
-{
-    int32 e = 1;
+message empty { int32 e = 1; }
+
+message getDataServerListResponse {
+  int32 code = 1;
+  string msg = 2;
+  repeated dataServerInfo dataServerInfoList = 3;
 }
 
-message getDataServerListResponse
-{
-    int32 code                                 = 1;
-    string msg                                 = 2;
-    repeated dataServerInfo dataServerInfoList = 3;
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string group = 3;
 }
 
-message RegisterRequest
-{
-    string username = 1;
-    string password = 2;
-    string group    = 3;
+message LoginRequest {
+  string username = 1;
+  string password = 2;
 }
 
-message LoginRequest
-{
-    string username = 1;
-    string password = 2;
+message setFilePermissionRequest {
+  string username = 1;
+  string filename = 2;
+  string group = 3;
+  int32 permission = 4;
 }
 
-message setFilePermissionRequest
-{
-    string username  = 1;
-    string filename  = 2;
-    string group     = 3;
-    int32 permission = 4;
+message lockFileRequest {
+  string username = 1;
+  string filepath = 2;
 }
 
-message lockFileRequest
-{
-    string username = 1;
-    string filepath = 2;
+message unlockFileRequest {
+  string username = 1;
+  string filepath = 2;
 }
 
-message unlockFileRequest
-{
-    string username = 1;
-    string filepath = 2;
+message checkFilePermissionRequest {
+  string username = 1;
+  string filepath = 2;
+}
+
+message checkCacheRequest {
+  string filepath = 1;
+  string timestamp = 2;
 }
