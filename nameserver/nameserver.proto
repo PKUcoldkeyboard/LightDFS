@@ -2,83 +2,147 @@ syntax = "proto3";
 
 package lightdfs;
 
-service nameserver {
-  // 注册数据服务器
-  rpc registerDataServer(dataServerInfo) returns (response);
-  // 获取数据服务器列表
-  rpc getDataServerList(empty) returns (getDataServerListResponse);
-  // 下线数据服务器
-  rpc logoutDataServer(dataServerInfo) returns (response);
-  // 注册用户
-  rpc registerUser(RegisterRequest) returns (response);
-  // 登录
-  rpc login(LoginRequest) returns (response);
-  // 设置文件权限
-  rpc setFilePermission(setFilePermissionRequest) returns (response);
-  // 文件锁
-  rpc lockFile(lockFileRequest) returns (response);
-  rpc unlockFile(unlockFileRequest) returns (response);
-  // 检查文件权限
-  rpc checkFilePermission(checkFilePermissionRequest) returns (response);
-  // 检查缓存
-  rpc checkCache(checkCacheRequest) returns (response);
+service nameserver
+{
+    // 注册数据服务器
+    rpc RegisterDataServer(DataServerInfo) returns (Response);
+    // 获取数据服务器列表
+    rpc GetDataServerList(empty) returns (GetDataServerListResponse);
+    // 下线数据服务器
+    rpc LogoutDataServer(DataServerInfo) returns (Response);
+    // 注册用户
+    rpc RegisterUser(RegisterRequest) returns (Response);
+    // 登录
+    rpc Login(LoginRequest) returns (Response);
+    // 文件锁
+    rpc LockFile(LockFileRequest) returns (Response);
+    rpc UnlockFile(UnlockFileRequest) returns (Response);
+    // 检查文件权限
+    rpc CheckFilePermission(CheckFilePermissionRequest) returns (Response);
+    // 检查缓存
+    rpc CheckCache(CheckCacheRequest) returns (Response);
+    // 更改文件拥有者
+    rpc ChownFile(ChownFileRequest) returns (Response);
+    // 更改文件权限
+    rpc ChmodFile(ChmodFileRequest) returns (Response);
+    // 更改文件所属组
+    rpc ChangeGroup(ChangeGroupRequest) returns (Response);
 }
 
-
-message response {
-  int32 code = 1;
-  string msg = 2;
+message Response
+{
+    int32 code = 1;
+    string msg = 2;
 }
 
-message dataServerInfo {
-  // 使用uuid
-  string uuid = 1;
-  string ip = 2;
-  int32 port = 3;
+message DataServerInfo
+{
+    int64 id   = 1;
+    string ip  = 2;
+    int32 port = 3;
 }
 
-message empty { int32 e = 1; }
-
-message getDataServerListResponse {
-  int32 code = 1;
-  string msg = 2;
-  repeated dataServerInfo dataServerInfoList = 3;
+message empty
+{
+    int32 e = 1;
 }
 
-message RegisterRequest {
-  string username = 1;
-  string password = 2;
-  string group = 3;
+message GetDataServerListResponse
+{
+    int32 code                                 = 1;
+    string msg                                 = 2;
+    repeated DataServerInfo dataServerInfoList = 3;
 }
 
-message LoginRequest {
-  string username = 1;
-  string password = 2;
+message RegisterRequest
+{
+    string username = 1;
+    string password = 2;
+    string group    = 3;
 }
 
-message setFilePermissionRequest {
-  string username = 1;
-  string filename = 2;
-  string group = 3;
-  int32 permission = 4;
+message LoginRequest
+{
+    string username = 1;
+    string password = 2;
 }
 
-message lockFileRequest {
-  string username = 1;
-  string filepath = 2;
+message SetFilePermissionRequest
+{
+    string username  = 1;
+    string filename  = 2;
+    string group     = 3;
+    int32 permission = 4;
 }
 
-message unlockFileRequest {
-  string username = 1;
-  string filepath = 2;
+message LockFileRequest
+{
+    string username = 1;
+    string filepath = 2;
 }
 
-message checkFilePermissionRequest {
-  string username = 1;
-  string filepath = 2;
+message UnlockFileRequest
+{
+    string username = 1;
+    string filepath = 2;
 }
 
-message checkCacheRequest {
-  string filepath = 1;
-  string timestamp = 2;
+message CheckFilePermissionRequest
+{
+    string username = 1;
+    string filepath = 2;
+}
+
+message CheckCacheRequest
+{
+    string filepath  = 1;
+    string timestamp = 2;
+}
+
+message ChownFileRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+    string owner      = 3;
+}
+
+message ChangeGroupRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+    string group      = 3;
+}
+
+message ChmodFileRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+    string permission = 3;
+}
+
+message GetFileInfoRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+}
+
+message FileInfo
+{
+    int64 fid         = 1;
+    string name       = 2;
+    string path       = 3;
+    string owner      = 4;
+    string group      = 5;
+    string permission = 6;
+    int64 size        = 7;
+    int64 ctime       = 8;
+    int64 mtime       = 9;
+    bool mode         = 10;
+}
+
+message GetFileInfoResponse
+{
+    int64 sequence_id = 1;
+    int32 success     = 2;
+    FileInfo info     = 3;
 }
