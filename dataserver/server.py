@@ -15,12 +15,12 @@ import dataserver_pb2 as ds_pb2
 
 
 class DataServerServicer(ds_grpc.DataServerServicer):
-    def __init__(self, host=None, port=None, data_dir=None):
+    def __init__(self, id=None, host=None, port=None, data_dir=None):
         self.logger = configure_logger()
         self.host = host
         self.port = port
         self.data_dir = data_dir
-        self.id = getId()
+        self.id = id
         self.logger.info(
             f"DataServer {self.host} is starting, listen port: {self.port}")
         if not os.path.exists(self.data_dir):
@@ -224,16 +224,23 @@ class DataServerServicer(ds_grpc.DataServerServicer):
     
 
 def start_server():
+    id = getId()
     host = DFS_SETTINGS['DATASERVER']['HOST']
     port = DFS_SETTINGS['DATASERVER']['PORT']
     data_dir = DFS_SETTINGS['DATASERVER']['DATA_DIR']
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     ds_grpc.add_DataServerServicer_to_server(
-        DataServerServicer(host, port, data_dir), server)
+        DataServerServicer(id, host, port, data_dir), server)
     server.add_insecure_port(f'[::]:{port}')
     server.start()
-    server.wait_for_termination()
+    try:
+        server.wait_for_termination()
+    except KeyboardInterrupt:
+        # 下线通知
+        channel = grpc.insecure_channel(f'{DFS_SETTINGS["NAMESERVER"]["HOST"]}:{DFS_SETTINGS["NAMESERVER"]["PORT"]}')
+        stub = ns_grpc.NameServerStub(channel)
+        stub.LogoutDataServer(ns_pb2.DataServerInfo(id=id, host=host, port=port))
 
 
 if __name__ == "__main__":
