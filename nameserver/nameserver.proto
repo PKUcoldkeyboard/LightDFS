@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package lightdfs;
 
-service Nameserver
+service NameServer
 {
     // 注册数据服务器
     rpc RegisterDataServer(DataServerInfo) returns (Response);
@@ -19,21 +19,20 @@ service Nameserver
     // 文件锁
     rpc LockFile(LockFileRequest) returns (Response);
     rpc UnlockFile(UnlockFileRequest) returns (Response);
-    // 检查文件权限
-    rpc CheckFilePermission(CheckFilePermissionRequest) returns (Response);
     // 检查缓存
+    rpc CheckCache(CheckCacheRequest) returns (Response);
 }
 
 message Response
 {
-    int32 code = 1;
-    string msg = 2;
+    int32 success = 1;
+    string message = 2;
 }
 
 message DataServerInfo
 {
     int64 id   = 1;
-    string ip  = 2;
+    string host  = 2;
     int32 port = 3;
 }
 
@@ -67,13 +66,6 @@ message LogoutRequest
     string username = 1;
 }
 
-message SetFilePermissionRequest
-{
-    string username  = 1;
-    string filename  = 2;
-    string group     = 3;
-    int32 permission = 4;
-}
 
 message LockFileRequest
 {
@@ -87,11 +79,6 @@ message UnlockFileRequest
     string filepath = 2;
 }
 
-message CheckFilePermissionRequest
-{
-    string username = 1;
-    string filepath = 2;
-}
 
 message CheckCacheRequest
 {
@@ -99,26 +86,6 @@ message CheckCacheRequest
     string timestamp = 2;
 }
 
-message ChownFileRequest
-{
-    int64 sequence_id = 1;
-    string path       = 2;
-    string owner      = 3;
-}
-
-message ChangeGroupRequest
-{
-    int64 sequence_id = 1;
-    string path       = 2;
-    string group      = 3;
-}
-
-message ChmodFileRequest
-{
-    int64 sequence_id = 1;
-    string path       = 2;
-    string permission = 3;
-}
 
 message GetFileInfoRequest
 {

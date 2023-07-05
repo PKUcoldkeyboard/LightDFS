@@ -5,7 +5,7 @@ import grpc
 import nameserver_pb2 as nameserver__pb2
 
 
-class NameserverStub(object):
+class NameServerStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,53 +15,53 @@ class NameserverStub(object):
             channel: A grpc.Channel.
         """
         self.RegisterDataServer = channel.unary_unary(
-                '/lightdfs.Nameserver/RegisterDataServer',
+                '/lightdfs.NameServer/RegisterDataServer',
                 request_serializer=nameserver__pb2.DataServerInfo.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.GetDataServerList = channel.unary_unary(
-                '/lightdfs.Nameserver/GetDataServerList',
+                '/lightdfs.NameServer/GetDataServerList',
                 request_serializer=nameserver__pb2.empty.SerializeToString,
                 response_deserializer=nameserver__pb2.GetDataServerListResponse.FromString,
                 )
         self.LogoutDataServer = channel.unary_unary(
-                '/lightdfs.Nameserver/LogoutDataServer',
+                '/lightdfs.NameServer/LogoutDataServer',
                 request_serializer=nameserver__pb2.DataServerInfo.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.RegisterUser = channel.unary_unary(
-                '/lightdfs.Nameserver/RegisterUser',
+                '/lightdfs.NameServer/RegisterUser',
                 request_serializer=nameserver__pb2.RegisterRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.Login = channel.unary_unary(
-                '/lightdfs.Nameserver/Login',
+                '/lightdfs.NameServer/Login',
                 request_serializer=nameserver__pb2.LoginRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.Logout = channel.unary_unary(
-                '/lightdfs.Nameserver/Logout',
+                '/lightdfs.NameServer/Logout',
                 request_serializer=nameserver__pb2.LogoutRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.LockFile = channel.unary_unary(
-                '/lightdfs.Nameserver/LockFile',
+                '/lightdfs.NameServer/LockFile',
                 request_serializer=nameserver__pb2.LockFileRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.UnlockFile = channel.unary_unary(
-                '/lightdfs.Nameserver/UnlockFile',
+                '/lightdfs.NameServer/UnlockFile',
                 request_serializer=nameserver__pb2.UnlockFileRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
-        self.CheckFilePermission = channel.unary_unary(
-                '/lightdfs.Nameserver/CheckFilePermission',
-                request_serializer=nameserver__pb2.CheckFilePermissionRequest.SerializeToString,
+        self.CheckCache = channel.unary_unary(
+                '/lightdfs.NameServer/CheckCache',
+                request_serializer=nameserver__pb2.CheckCacheRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
 
 
-class NameserverServicer(object):
+class NameServerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def RegisterDataServer(self, request, context):
@@ -119,16 +119,15 @@ class NameserverServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def CheckFilePermission(self, request, context):
-        """检查文件权限
-        检查缓存
+    def CheckCache(self, request, context):
+        """检查缓存
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_NameserverServicer_to_server(servicer, server):
+def add_NameServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RegisterDataServer': grpc.unary_unary_rpc_method_handler(
                     servicer.RegisterDataServer,
@@ -170,19 +169,19 @@ def add_NameserverServicer_to_server(servicer, server):
                     request_deserializer=nameserver__pb2.UnlockFileRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
-            'CheckFilePermission': grpc.unary_unary_rpc_method_handler(
-                    servicer.CheckFilePermission,
-                    request_deserializer=nameserver__pb2.CheckFilePermissionRequest.FromString,
+            'CheckCache': grpc.unary_unary_rpc_method_handler(
+                    servicer.CheckCache,
+                    request_deserializer=nameserver__pb2.CheckCacheRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'lightdfs.Nameserver', rpc_method_handlers)
+            'lightdfs.NameServer', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class Nameserver(object):
+class NameServer(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -196,7 +195,7 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/RegisterDataServer',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/RegisterDataServer',
             nameserver__pb2.DataServerInfo.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -213,7 +212,7 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/GetDataServerList',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/GetDataServerList',
             nameserver__pb2.empty.SerializeToString,
             nameserver__pb2.GetDataServerListResponse.FromString,
             options, channel_credentials,
@@ -230,7 +229,7 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/LogoutDataServer',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/LogoutDataServer',
             nameserver__pb2.DataServerInfo.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -247,7 +246,7 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/RegisterUser',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/RegisterUser',
             nameserver__pb2.RegisterRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -264,7 +263,7 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/Login',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/Login',
             nameserver__pb2.LoginRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -281,7 +280,7 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/Logout',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/Logout',
             nameserver__pb2.LogoutRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -298,7 +297,7 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/LockFile',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/LockFile',
             nameserver__pb2.LockFileRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -315,14 +314,14 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/UnlockFile',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/UnlockFile',
             nameserver__pb2.UnlockFileRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def CheckFilePermission(request,
+    def CheckCache(request,
             target,
             options=(),
             channel_credentials=None,
@@ -332,8 +331,8 @@ class Nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.Nameserver/CheckFilePermission',
-            nameserver__pb2.CheckFilePermissionRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/CheckCache',
+            nameserver__pb2.CheckCacheRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
