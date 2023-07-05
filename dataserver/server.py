@@ -32,7 +32,11 @@ class DataServerServicer(ds_grpc.DataServerServicer):
         self.stub = ns_grpc.NameServerStub(channel)
         
         # 上线请求
-        self.stub.RegisterDataServer(ns_pb2.DataServerInfo(id=self.id, host=self.host, port=self.port))
+        response = self.stub.RegisterDataServer(ns_pb2.DataServerInfo(id=self.id, host=self.host, port=self.port))
+        if not response.success:
+            self.logger.error(response.message)            
+        else:
+            self.logger.info(response.message)
 
     def ListFile(self, request, context):
         self.logger.info(f"ls {request.path} - {request.sequence_id}")
