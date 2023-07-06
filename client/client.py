@@ -88,6 +88,11 @@ class Client():
             'sequence_id': response.sequence_id,
         }))
 
+    def download(self, path):
+        sequence_id = getId()
+        localCache_path = DFS_SETTINGS['CLIENT']['DATA_DIR']
+        
+
 if __name__ == "__main__":
     client = Client()
     # 命令行交互
