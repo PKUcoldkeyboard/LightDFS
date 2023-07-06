@@ -6,7 +6,6 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models import User, File, Trie
 from utils.settings import DFS_SETTINGS
-from utils.snowflake import getId
 
 
 nameserver_data_dir = DFS_SETTINGS['NAMESERVER']['DATA_DIR']
@@ -125,9 +124,9 @@ def get_trie():
     key = pickle.dumps('TRIE')
     try:
         value = db.Get(key)
-        return pickle.loads(value), 'Get trie successfully!'
+        return pickle.loads(value)
     except KeyError:
-        return None, 'Trie not exists!'
+        return None
 
 
 def update_trie(trie):
