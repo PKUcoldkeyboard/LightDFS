@@ -2,6 +2,7 @@ import grpc
 import os
 import sys
 import json
+import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'dataserver'))
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'nameserver'))
@@ -14,8 +15,9 @@ import nameserver_pb2_grpc as ns_grpc
 import nameserver_pb2 as ns_pb2
 
 class Client():
-    def __init__(self):
+    def __init__(self, username=None):
         self.current_dir = '/'
+        self.USERNAME = username
         ds_host = DFS_SETTINGS['DATASERVER']['HOST']
         ds_port = DFS_SETTINGS['DATASERVER']['PORT']
         ns_host = DFS_SETTINGS['NAMESERVER']['HOST']
@@ -24,6 +26,20 @@ class Client():
         ns_channel = grpc.insecure_channel(f'{ns_host}:{ns_post}')
         self.ds_stub = ds_grpc.DataServerStub(channel)
         self.ns_stub = ns_grpc.NameServerStub(ns_channel)
+        self.localCache_path = DFS_SETTINGS['CLIENT']['DATA_DIR']
+
+    def register(self, username, password):
+        response = self.ns_stub.RegisterUser(
+            ns_pb2.RegisterRequest(username=username, password=password)
+        )
+        return response
+
+    def login(self, username, password):
+        response = self.ns_stub.Login(
+            ns_pb2.LoginRequest(username=username, password=password)
+        )
+        return response
+
 
     def touch(self, path):
         try:
@@ -35,6 +51,10 @@ class Client():
                 'message': response.message,
                 'sequence_id': response.sequence_id,
             }))
+            if response.success:
+                file_path = self.localCache_path + '/' + self.USERNAME + '/' + path
+                with open(file_path, 'w') as f:
+                    pass
         except grpc.RpcError:
             print('Cannot Connect to DataServer')
         except Exception as e:
@@ -127,12 +147,62 @@ class Client():
             print('Cannot Copy File')
 
 
+    def download(self, path):
+        sequence_id = getId()
+        localCache_path = DFS_SETTINGS['CLIENT']['DATA_DIR']
+        cacheList = os.listdir(localCache_path)
+        if path in cacheList:
+            filepath = localCache_path + '/' + path
+            localmtime = os.path.getmtime(filepath)
+            absolutepath = '/' + self.USERNAME + self.current_dir + path
+            response = self.ns_stub.CheckCache(
+                ds_pb2.CheckCacheRequest(absolutepath, localmtime)
+            )
+            print(json.dumps({
+                'success': response.success,
+                'message': response.message,
+            }))
+
+
 if __name__ == "__main__":
     client = Client()
+    jwt = {}
+    while True:
+        print("================welcome==================\n")
+        print("键入1选择登陆\n")
+        print("键入2选择注册\n")
+        print("=========================================\n")
+        num = input("please input a num:")
+        if  num.isnumeric() == True:
+            x = int(num)
+            if x == 2:
+                uname = input('请输入用户名:')
+                passwd = input('请输入密码：')
+                response = client.register(uname,passwd)
+                print(json.dumps({
+                'success': response.success,
+                'message': response.message,
+            }))
+            if x == 1:
+                uname = input('请输入用户名:')
+                passwd = input('请输入密码：')
+                metadata = (('jwt', ))
+                response = client.login(uname, passwd)
+                success, message = response.success, response.message
+                if success:
+                    client.USERNAME = uname
+                    os.system('clear')
+                    break
+                else:
+                    print("登陆失败:{}", message)
+
+        else:
+            print("[-]输入不符合，请重新输入~")
+            continue
     # 命令行交互
     while True:
         command = input(
-            f"\033[1;32;40m(ldfs) ~{client.current_dir} \033[m> ").split()
+            f"\033[1;32;40m(ldfs) ~{client.USERNAME} {client.current_dir} \033[m> ").split()
         if len(command) == 0:
             continue
         elif command[0] == 'exit':
@@ -242,3 +312,16 @@ if __name__ == "__main__":
                 src = get_full_path(client.current_dir, command[1])
                 dst = get_full_path(client.current_dir, command[2])
                 client.cp(src, dst, True)
+
+        elif command[0] == 'download':
+            if len(command) <= 1:
+                print("cp: missing operand")
+                continue
+
+            if len(command) > 2:
+                print("cp: too many arguments")
+                continue
+
+            if len(command) == 2:
+                path = command[1]
+                client.download(path)
