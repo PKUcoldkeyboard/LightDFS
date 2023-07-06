@@ -3,11 +3,10 @@ import pickle
 import bcrypt
 import sys
 import os
-import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.snowflake import getId
+from models import User, File, Trie
 from utils.settings import DFS_SETTINGS
-from models import User, File, DataServer
+
 
 nameserver_data_dir = DFS_SETTINGS['NAMESERVER']['DATA_DIR']
 
@@ -69,7 +68,11 @@ def create_file(absolute_path, size, is_dir, ctime, mtime):
                 is_dir=is_dir, ctime=ctime, mtime=mtime)
     value = pickle.dumps(file)
     try:
+        trie = pickle.loads(db.Get(pickle.dumps('TRIE')))
+        trie.insert(absolute_path.split('/'), is_dir)
         db.Put(key, value)
+    except KeyError:
+        return False, 'System Error: Trie not exists!'
     except Exception as e:
         return False, "System Error: Create file failed!"
     return True, 'Create file successfully!'
@@ -79,6 +82,10 @@ def delete_file(absolute_path):
     key = pickle.dumps(f'FILE:{absolute_path}')
     try:
         db.Delete(key)
+        trie = pickle.loads(db.Get(pickle.dumps('TRIE')))
+        trie.delete(absolute_path.split('/'))
+    except KeyError:
+        return False, 'System Error: Trie not exists!'
     except Exception as e:
         return False, "System Error: Delete file failed!"
     return True, 'Delete file successfully!'
@@ -111,3 +118,30 @@ def get_file(absolute_path):
         return pickle.loads(value)
     except KeyError:
         return None
+
+
+def get_trie():
+    key = pickle.dumps('TRIE')
+    try:
+        value = db.Get(key)
+        return pickle.loads(value)
+    except KeyError:
+        return None
+
+
+def update_trie(trie):
+    key = pickle.dumps('TRIE')
+    try:
+        db.Put(key, pickle.dumps(trie))
+        return True, 'Update trie successfully!'
+    except Exception as e:
+        return False, "System Error: Update trie failed!"
+
+
+key = pickle.dumps('TRIE')
+try:
+    value = db.Get(key)
+except KeyError:
+    # 创建TRIE树
+    trie = Trie()
+    db.Put(key, pickle.dumps(trie))

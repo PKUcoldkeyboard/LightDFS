@@ -14,8 +14,6 @@ service NameServer
     rpc RegisterUser(RegisterRequest) returns (Response);
     // 登录
     rpc Login(LoginRequest) returns (Response);
-    // 登出
-    rpc Logout(LogoutRequest) returns (Response);
     // 文件锁，lock_type: 0:读锁，1:写锁
     rpc LockFile(LockFileRequest) returns (Response);
     rpc UnlockFile(UnlockFileRequest) returns (Response);
@@ -29,19 +27,21 @@ service NameServer
     rpc ModifyFile(ModifyFileRequest) returns (Response);
     // 获取文件信息， 提供文件路径
     rpc GetFileInfo(GetFileInfoRequest) returns (FileInfoResponse);
+    // 列出文件，对应ls命令
+    rpc ListFile(ListFileRequest) returns (ListFileResponse) {}
 }
 
 message Response
 {
-    int32 success = 1;
+    int32 success  = 1;
     string message = 2;
 }
 
 message DataServerInfo
 {
-    int64 id   = 1;
-    string host  = 2;
-    int32 port = 3;
+    int64 id    = 1;
+    string host = 2;
+    int32 port  = 3;
 }
 
 message empty
@@ -68,33 +68,23 @@ message LoginRequest
     string password = 2;
 }
 
-message LogoutRequest
-{
-    string username = 1;
-}
-
-
 message LockFileRequest
 {
-    string username = 1;
-    int32 lock_type = 2;
-    string filepath = 3;
+    int32 lock_type = 1;
+    string filepath = 2;
 }
 
 message UnlockFileRequest
 {
-    string username = 1;
-    int32 lock_type = 2;
-    string filepath = 3;
+    int32 lock_type = 1;
+    string filepath = 2;
 }
-
 
 message CheckCacheRequest
 {
-    string absolute_path  = 1;
-    float mtime = 2;
+    string absolute_path = 1;
+    float mtime          = 2;
 }
-
 
 message GetFileInfoRequest
 {
@@ -125,10 +115,23 @@ message ModifyFileRequest
 
 message FileInfoResponse
 {
-    int64 size           = 1;
-    bool is_dir          = 2;
-    float ctime          = 3;
-    float mtime          = 4;
-    int32 success        = 5;
-    string message       = 6;
+    int64 size     = 1;
+    bool is_dir    = 2;
+    float ctime    = 3;
+    float mtime    = 4;
+    int32 success  = 5;
+    string message = 6;
+}
+
+message ListFileRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+}
+
+message ListFileResponse
+{
+    int64 sequence_id     = 1;
+    int32 success         = 2;
+    repeated string files = 3;
 }
