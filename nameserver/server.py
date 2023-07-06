@@ -80,12 +80,12 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         metadata = dict(context.invocation_metadata())
         jwt = metadata.get('jwt')
         
-        if verify_token(jwt):
+        if self.verify_token(jwt):
             return ns_pb2.Response(success=0, message="User already login!")
         
         success, message = db.login(request.username, request.password)
         if success:
-            jwt = gen_token(request.username)
+            jwt = self.gen_token(request.username)
             context.set_trailing_metadata(('jwt', jwt))
             return ns_pb2.Response(success=1, message=message)
         return ns_pb2.Response(success=0, message=message)
@@ -95,7 +95,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         metadata = dict(context.invocation_metadata())
         jwt = metadata.get('jwt')
         
-        if not verify_token(jwt):
+        if not self.verify_token(jwt):
             return ns_pb2.Response(success=0, message="User already login!")
         
         # 获得文件路径和锁的类型
@@ -126,7 +126,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         metadata = dict(context.invocation_metadata())
         jwt = metadata.get('jwt')
         
-        if not verify_token(jwt):
+        if not self.verify_token(jwt):
             return ns_pb2.Response(success=0, message="User already login!")
         # 获得文件路径和锁的类型
         file_path = request.filepath
