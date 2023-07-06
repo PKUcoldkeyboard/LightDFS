@@ -19,7 +19,9 @@ DFS_SETTINGS = {
     "LOG_CONFIG": {
         "LOG_DIR": "/tmp/lightdfs/logs",
         "LOG_LEVEL": "INFO",
+        "LOG_TO_CONSOLE": True,
+        "LOG_TO_FILE": True,
     },
     "ROOT": "/",
-    "REPLICATION": 3,
+    "JWT_SECRET": "LIGHTDFS",
 }
