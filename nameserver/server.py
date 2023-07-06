@@ -152,6 +152,11 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
             return ns_pb2.FileInfoResponse(success=1, message="Get file info successfully!",
                                            size=file.size, is_dir=file.is_dir, ctime=file.ctime, mtime=file.mtime)
 
+        def CheckCache(self, request, context):
+            file = db.get_file(request.filepath)
+            if file.mtime > request.mtime:
+                return ns_pb2.Response(success=0, message="File has been modified!")
+            return ns_pb2.Response(success=1, message="File is up to date!")
 
 
 if __name__ == "__main__":

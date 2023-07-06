@@ -91,8 +91,8 @@ message UnlockFileRequest
 
 message CheckCacheRequest
 {
-    string filepath  = 1;
-    string timestamp = 2;
+    string absolute_path  = 1;
+    string mtime = 2;
 }
 
 
