@@ -4,6 +4,7 @@ import sys
 import json
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'dataserver'))
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'nameserver'))
 import dataserver_pb2 as ds_pb2
 import dataserver_pb2_grpc as ds_grpc
 from utils.settings import DFS_SETTINGS
@@ -16,8 +17,12 @@ class Client():
         self.current_dir = '/'
         host = DFS_SETTINGS['DATASERVER']['HOST']
         port = DFS_SETTINGS['DATASERVER']['PORT']
+        nameserver_host = DFS_SETTINGS['NAMESERVER']['HOST']
+        nameserver_post = DFS_SETTINGS['NAMESERVER']['PORT']
         self.channel = grpc.insecure_channel(f'{host}:{port}')
+        self.nameserver_channel = grpc.insecure_channel(f'{nameserver_host}:{nameserver_post}')
         self.stub = ds_grpc.DataServerStub(self.channel)
+        self.nameserver_stub = ds_grpc.DataServerStub(self.nameserver_channel)
 
     def touch(self, path):
         sequence_id = getId()
@@ -64,6 +69,24 @@ class Client():
             'sequence_id': response.sequence_id,
         }))
 
+    def mv(self, src, dst):
+        sequence_id = getId()
+        response = self.stub.RenameFile(
+            ds_pb2.RenameFileRequest(src=src, dst=dst, sequence_id=sequence_id))
+        print(json.dumps({
+            'success': response.success,
+            'message': response.message,
+            'sequence_id': response.sequence_id,
+        }))
+    def cp(self, src, dst, recursive=False):
+        sequence_id = getId()
+        response = self.stub.CopyFile(
+            ds_pb2.CopyFileRequest(recursive=recursive, src=src, dst=dst, sequence_id=sequence_id))
+        print(json.dumps({
+            'success': response.success,
+            'message': response.message,
+            'sequence_id': response.sequence_id,
+        }))
 
 if __name__ == "__main__":
     client = Client()
@@ -148,4 +171,36 @@ if __name__ == "__main__":
             elif len(command) == 3 and command[1] == '-r':
                 path = get_full_path(client.current_dir, command[2])
                 client.rm(path, True)
+        
+        elif command[0] == 'mv':
+            if len(command) <= 2:
+                print("mv: missing operand")
+                continue
+                
+            if len(command) > 3:
+                print("mv: too many arguments")
+                continue
+                
+            if len(command) == 3:
+                src = get_full_path(client.current_dir, command[1])
+                dst = get_full_path(client.current_dir, command[2])
+                client.mv(src, dst)
+
+        elif command[0] == 'cp':
+            if len(command) <= 2:
+                print("mv: missing operand")
+                continue
+                
+            if len(command) > 4:
+                print("mv: too many arguments")
+                continue
+                
+            if len(command) == 3:
+                src = get_full_path(client.current_dir, command[1])
+                dst = get_full_path(client.current_dir, command[2])
+                client.cp(src, dst)
+            elif len(command) == 4 and command[1] == '-r':
+                src = get_full_path(client.current_dir, command[1])
+                dst = get_full_path(client.current_dir, command[2])
+                client.cp(src, dst,True)
                 
