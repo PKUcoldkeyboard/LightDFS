@@ -56,7 +56,7 @@ def login(username, password):
     return True, 'Login successfully!'
 
 
-def create_file(absolute_path, size, is_dir):
+def create_file(absolute_path, size, is_dir, ctime, mtime):
     # 判断文件是否存在
     key = pickle.dumps(f'FILE:{absolute_path}')
     try:
@@ -66,7 +66,7 @@ def create_file(absolute_path, size, is_dir):
         pass
     # 创建文件
     file = File(absolute_path=absolute_path, size=size,
-                is_dir=is_dir, ctime=time.time(), mtime=time.time())
+                is_dir=is_dir, ctime=ctime, mtime=mtime)
     value = pickle.dumps(file)
     try:
         db.Put(key, value)
@@ -84,7 +84,7 @@ def delete_file(absolute_path):
     return True, 'Delete file successfully!'
 
 
-def update_file(absolute_path, size, is_dir):
+def update_file(absolute_path, size, is_dir, mtime):
     key = pickle.dumps(f'FILE:{absolute_path}')
     try:
         value = db.Get(key)
@@ -95,7 +95,7 @@ def update_file(absolute_path, size, is_dir):
         file.size = size
     if is_dir != None and is_dir in [True, False]:
         file.is_dir = is_dir
-    file.mtime = time.time()
+    file.mtime = mtime
     value = pickle.dumps(file)
     try:
         db.Put(key, value)

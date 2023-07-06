@@ -7,7 +7,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.logger import configure_logger
-from models import DataServer
+from models import DataServer, File
 import db
 
 class NameServerServicer(ns_pb2_grpc.NameServerServicer):
@@ -53,8 +53,8 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         success, message = db.login(request.username, request.password)
         if success:
             self.OnlineUserDist[request.username] = 1
-            return ns_pb2.Response(success=success, message=message)
-        return ns_pb2.Response(success=success, message=message)
+            return ns_pb2.Response(success=1, message=message)
+        return ns_pb2.Response(success=0, message=message)
 
     def Logout(self, request, context):
         # 1. 判断用户是否已经登录
@@ -116,6 +116,43 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
             # 3.2 解写锁
             del self.WriteLockDist[file_path]
             return ns_pb2.Response(success=1, message="Unlock file successfully!")
+
+        def AddFile(self, request, context):
+            success, message = db.create_file(request.absolute_path, request.size, request.is_dir, request.ctime, request.mtime)
+            if success:
+                return ns_pb2.Response(success=1, message=message)
+            return ns_pb2.Response(success=0, message=message)
+
+        def DeleteFile(self, request, context):
+            success, message = db.delete_file(request.absolute_path)
+            if success:
+                return ns_pb2.Response(success=1, message=message)
+            return ns_pb2.Response(success=0, message=message)
+
+        def ModifyFile(self, request, context):
+            if request.old_absolute_path != request.new_absolute_path:
+                file = db.get_file(request.old_absolute_path)
+                db.delete_file(request.old_absolute_path)
+                success, message = db.create_file(request.new_absolute_path, file.size, file.is_dir,
+                                                  file.ctime, request.mtime)
+                if success:
+                    return ns_pb2.Response(success=1, message=message)
+                return ns_pb2.Response(success=0, message=message)
+            else:
+                success, message = db.update_file(absolute_path=request.new_absolute_path,
+                                                  size=request.new_size, mtime=request.mtime)
+                if success:
+                    return ns_pb2.Response(success=1, message=message)
+                return ns_pb2.Response(success=0, message=message)
+
+        def GetFileInfo(self, request, context):
+            file = db.get_file(request.absolute_path)
+            if file is None:
+                return ns_pb2.Response(success=0, message="File not exist!")
+            return ns_pb2.FileInfoResponse(success=1, message="Get file info successfully!",
+                                           size=file.size, is_dir=file.is_dir, ctime=file.ctime, mtime=file.mtime)
+
+
 
 if __name__ == "__main__":
     host = "localhost"

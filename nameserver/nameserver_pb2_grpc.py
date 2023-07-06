@@ -71,13 +71,13 @@ class NameServerStub(object):
                 )
         self.ModifyFile = channel.unary_unary(
                 '/lightdfs.NameServer/ModifyFile',
-                request_serializer=nameserver__pb2.FileInfo.SerializeToString,
+                request_serializer=nameserver__pb2.ModifyFileRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.GetFileInfo = channel.unary_unary(
                 '/lightdfs.NameServer/GetFileInfo',
                 request_serializer=nameserver__pb2.GetFileInfoRequest.SerializeToString,
-                response_deserializer=nameserver__pb2.FileInfo.FromString,
+                response_deserializer=nameserver__pb2.FileInfoResponse.FromString,
                 )
 
 
@@ -127,7 +127,7 @@ class NameServerServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def LockFile(self, request, context):
-        """文件锁
+        """文件锁，lock_type: 0:读锁，1:写锁
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -234,13 +234,13 @@ def add_NameServerServicer_to_server(servicer, server):
             ),
             'ModifyFile': grpc.unary_unary_rpc_method_handler(
                     servicer.ModifyFile,
-                    request_deserializer=nameserver__pb2.FileInfo.FromString,
+                    request_deserializer=nameserver__pb2.ModifyFileRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
             'GetFileInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.GetFileInfo,
                     request_deserializer=nameserver__pb2.GetFileInfoRequest.FromString,
-                    response_serializer=nameserver__pb2.FileInfo.SerializeToString,
+                    response_serializer=nameserver__pb2.FileInfoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -451,7 +451,7 @@ class NameServer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/ModifyFile',
-            nameserver__pb2.FileInfo.SerializeToString,
+            nameserver__pb2.ModifyFileRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -469,6 +469,6 @@ class NameServer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/GetFileInfo',
             nameserver__pb2.GetFileInfoRequest.SerializeToString,
-            nameserver__pb2.FileInfo.FromString,
+            nameserver__pb2.FileInfoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

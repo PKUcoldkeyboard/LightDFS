@@ -26,9 +26,9 @@ service NameServer
     // 删除文件（夹），提供文件路径
     rpc DeleteFile(DeleteRequest) returns (Response);
     // 修改文件（夹），提供原始文件路径，新文件路径，新文件大小，修改时间
-    rpc ModifyFile(FileInfo) returns (Response);
+    rpc ModifyFile(ModifyFileRequest) returns (Response);
     // 获取文件信息， 提供文件路径
-    rpc GetFileInfo(GetFileInfoRequest) returns (FileInfo);
+    rpc GetFileInfo(GetFileInfoRequest) returns (FileInfoResponse);
 }
 
 message Response
@@ -121,4 +121,14 @@ message ModifyFileRequest
     string new_absolute_path = 2;
     int64 new_size           = 3;
     int64 mtime              = 4;
+}
+
+message FileInfoResponse
+{
+    int64 size           = 1;
+    bool is_dir          = 2;
+    int64 ctime          = 3;
+    int64 mtime          = 4;
+    int32 success        = 5;
+    string message       = 6;
 }
