@@ -78,7 +78,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
     def Login(self, request, context):
         # 1. 判断用户是否已经登录
         metadata = dict(context.invocation_metadata())
-        jwt = metadata.get('jwt')
+        jwt = metadata.get('jwt')[0]
         
         if self.verify_token(jwt):
             return ns_pb2.Response(success=0, message="User already login!")
