@@ -38,21 +38,6 @@ class DataServerServicer(ds_grpc.DataServerServicer):
         else:
             self.logger.info(response.message)
 
-    def ListFile(self, request, context):
-        self.logger.info(f"ls {request.path} - {request.sequence_id}")
-        # 客户端限制了path的格式，传入的一定是绝对路径，所以直接拼接即可
-        file_path = f'{self.data_dir}{request.path}'
-
-        # 判断文件是否存在
-        if not os.path.exists(file_path):
-            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
-
-        if os.path.isfile(file_path):
-            return ds_pb2.BaseResponse(success=0, message='Path is not a directory!', sequence_id=request.sequence_id)
-
-        files = os.listdir(file_path)
-        return ds_pb2.ListFileResponse(success=1, files=files, sequence_id=request.sequence_id)
-
     def CreateFile(self, request, context):
         self.logger.info(f"touch {request.path} - {request.sequence_id}")
         file_path = f'{self.data_dir}{request.path}'
