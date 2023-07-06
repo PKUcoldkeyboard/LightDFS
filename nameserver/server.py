@@ -2,9 +2,12 @@ import grpc
 import os
 import sys
 import db
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'dataserver'))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import nameserver_pb2 as ns_pb2
 import nameserver_pb2_grpc as ns_pb2_grpc
+import dataserver_pb2 as ds_pb2
+import dataserver_pb2_grpc as ds_pb2_grpc
 from concurrent import futures
 from models import DataServer
 from utils.settings import DFS_SETTINGS
@@ -20,10 +23,13 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         self.port = port
 
         logger_path = DFS_SETTINGS['LOG_CONFIG']['LOG_DIR'] + \
-            f'nameserver_{self.id}.log'
+            f'/nameserver_{self.id}.log'
         logger_level = DFS_SETTINGS['LOG_CONFIG']['LOG_LEVEL']
         log_to_console = DFS_SETTINGS['LOG_CONFIG']['LOG_TO_CONSOLE']
         log_to_file = DFS_SETTINGS['LOG_CONFIG']['LOG_TO_FILE']
+
+        # 如果logger_path不存在，则创建它
+        os.makedirs(os.path.dirname(logger_path), exist_ok=True)
 
         self.logger = configure_logger(
             log_to_console=log_to_console, log_file_path=logger_path, log_to_file=log_to_file, level=logger_level)
@@ -40,6 +46,11 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
 
     def stop(self):
         self.logger.info("NameServer is stopping")
+        # 通知所有DataServer停止
+        for ds in self.DataServerList:
+            with grpc.insecure_channel(f'{ds.host}:{ds.port}') as channel:
+                stub = ds_pb2_grpc.DataServerStub(channel)
+                stub.NotifyOffline(ds_pb2.NotifyOfflineRequest(e=1))
         self.logger.info("NameServer is stopped")
 
     def ListFile(self, request, context):
