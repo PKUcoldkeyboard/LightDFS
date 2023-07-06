@@ -92,7 +92,7 @@ message UnlockFileRequest
 message CheckCacheRequest
 {
     string absolute_path  = 1;
-    string mtime = 2;
+    float mtime = 2;
 }
 
 
@@ -106,8 +106,8 @@ message FileInfo
     string absolute_path = 1;
     int64 size           = 2;
     bool is_dir          = 3;
-    int64 ctime          = 4;
-    int64 mtime          = 5;
+    float ctime          = 4;
+    float mtime          = 5;
 }
 
 message DeleteRequest
@@ -120,15 +120,15 @@ message ModifyFileRequest
     string old_absolute_path = 1;
     string new_absolute_path = 2;
     int64 new_size           = 3;
-    int64 mtime              = 4;
+    float mtime              = 4;
 }
 
 message FileInfoResponse
 {
     int64 size           = 1;
     bool is_dir          = 2;
-    int64 ctime          = 3;
-    int64 mtime          = 4;
+    float ctime          = 3;
+    float mtime          = 4;
     int32 success        = 5;
     string message       = 6;
 }
