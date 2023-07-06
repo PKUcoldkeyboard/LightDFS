@@ -25,6 +25,13 @@ class Client():
         self.ds_stub = ds_grpc.DataServerStub(channel)
         self.ns_stub = ns_grpc.NameServerStub(ns_channel)
 
+    def register(self, username, password):
+        response = self.nameserver_stub.RegisterUser(
+            ds_pb2.RegisterRequest(username=username, password=password)
+        )
+        return response
+
+
     def touch(self, path):
         try:
             sequence_id = getId()
@@ -130,10 +137,40 @@ class Client():
     def download(self, path):
         sequence_id = getId()
         localCache_path = DFS_SETTINGS['CLIENT']['DATA_DIR']
-        
+        cacheList = os.listdir(localCache_path)
+        if path in cacheList:
+            filepath = localCache_path + '/' + path
+            localmtime = os.path.getmtime(filepath)
+            response = self.nameserver_stub.CheckCache(
+                ds_pb2.CheckCacheRequest()
+            )
+
 
 if __name__ == "__main__":
     client = Client()
+    USERNAME = ""
+    while True:
+        print("================welcome==================\n")
+        print("键入1选择登陆\n")
+        print("键入2选择注册\n")
+        print("=========================================\n")
+        num = input("please input a num:")
+        if  num.isnumeric() == True:
+            x = int(num)
+            if x == 2:
+                uname = input('请输入用户名:')
+                passwd = input('请输入密码：')
+                response = client.register(uname,passwd)
+                print(json.dumps({
+                'success': response.success,
+                'message': response.message,
+            }))
+                
+                
+
+        else:
+            print("[-]输入不符合，请重新输入~")
+            continue
     # 命令行交互
     while True:
         command = input(
