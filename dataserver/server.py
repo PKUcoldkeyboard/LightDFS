@@ -108,7 +108,7 @@ class DataServerServicer(ds_grpc.DataServerServicer):
         src = f'{self.data_dir}{request.src}'
         dst = f'{self.data_dir}{request.dst}'
         # 判断文件是否存在
-        if not os.path.exists(src) or not os.path.exists(os.path.dirname(dst)):
+        if not os.path.exists(src):
             return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
 
         try:
@@ -138,6 +138,18 @@ class DataServerServicer(ds_grpc.DataServerServicer):
             self.logger.error(e)
             return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
         return ds_pb2.BaseResponse(success=1, message='Copy file successfully! ', sequence_id=request.sequence_id)
+
+    def RenameFile(self, request, context):
+        self.logger.info(f"mv {request.src} - {request.dst} - {request.sequence_id} ")
+        src = f'{self.data_dir}{request.src}'
+        dst = f'{self.data_dir}{request.dst}'
+        try:
+            os.rename(src, dst)
+        except Exception as e:
+            self.logger.error(e)
+            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
+        
+        return ds_pb2.BaseResponse(success=1, message='rename file successfully! ', sequence_id=request.sequence_id)
     
     def UploadFile(self, request_iterator, context):
         self.logger.info(f"upload {request_iterator} - {request.sequence_id}")
