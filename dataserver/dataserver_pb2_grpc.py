@@ -49,7 +49,7 @@ class DataServerStub(object):
                 request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.DownloadFile = channel.unary_stream(
+        self.DownloadFile = channel.unary_unary(
                 '/lightdfs.DataServer/DownloadFile',
                 request_serializer=dataserver__pb2.DownloadFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.DownloadFileResponse.FromString,
@@ -61,7 +61,7 @@ class DataServerStub(object):
                 )
         self.WriteFile = channel.stream_unary(
                 '/lightdfs.DataServer/WriteFile',
-                request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
+                request_serializer=dataserver__pb2.WriteFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
         self.OpenFile = channel.unary_unary(
@@ -72,6 +72,16 @@ class DataServerStub(object):
         self.NotifyOffline = channel.unary_unary(
                 '/lightdfs.DataServer/NotifyOffline',
                 request_serializer=dataserver__pb2.NotifyOfflineRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.ListFile = channel.unary_unary(
+                '/lightdfs.DataServer/ListFile',
+                request_serializer=dataserver__pb2.ListFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.ListFileResponse.FromString,
+                )
+        self.ChangeDir = channel.unary_unary(
+                '/lightdfs.DataServer/ChangeDir',
+                request_serializer=dataserver__pb2.ChangeDirRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
 
@@ -162,6 +172,20 @@ class DataServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListFile(self, request, context):
+        """列出文件，对应ls命令
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ChangeDir(self, request, context):
+        """ChangeDir
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DataServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -200,7 +224,7 @@ def add_DataServerServicer_to_server(servicer, server):
                     request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'DownloadFile': grpc.unary_stream_rpc_method_handler(
+            'DownloadFile': grpc.unary_unary_rpc_method_handler(
                     servicer.DownloadFile,
                     request_deserializer=dataserver__pb2.DownloadFileRequest.FromString,
                     response_serializer=dataserver__pb2.DownloadFileResponse.SerializeToString,
@@ -212,7 +236,7 @@ def add_DataServerServicer_to_server(servicer, server):
             ),
             'WriteFile': grpc.stream_unary_rpc_method_handler(
                     servicer.WriteFile,
-                    request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
+                    request_deserializer=dataserver__pb2.WriteFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
             'OpenFile': grpc.unary_unary_rpc_method_handler(
@@ -223,6 +247,16 @@ def add_DataServerServicer_to_server(servicer, server):
             'NotifyOffline': grpc.unary_unary_rpc_method_handler(
                     servicer.NotifyOffline,
                     request_deserializer=dataserver__pb2.NotifyOfflineRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'ListFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListFile,
+                    request_deserializer=dataserver__pb2.ListFileRequest.FromString,
+                    response_serializer=dataserver__pb2.ListFileResponse.SerializeToString,
+            ),
+            'ChangeDir': grpc.unary_unary_rpc_method_handler(
+                    servicer.ChangeDir,
+                    request_deserializer=dataserver__pb2.ChangeDirRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
     }
@@ -365,7 +399,7 @@ class DataServer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/lightdfs.DataServer/DownloadFile',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/DownloadFile',
             dataserver__pb2.DownloadFileRequest.SerializeToString,
             dataserver__pb2.DownloadFileResponse.FromString,
             options, channel_credentials,
@@ -400,7 +434,7 @@ class DataServer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/WriteFile',
-            dataserver__pb2.UploadFileRequest.SerializeToString,
+            dataserver__pb2.WriteFileRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -435,6 +469,40 @@ class DataServer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/NotifyOffline',
             dataserver__pb2.NotifyOfflineRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ListFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ListFile',
+            dataserver__pb2.ListFileRequest.SerializeToString,
+            dataserver__pb2.ListFileResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ChangeDir(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ChangeDir',
+            dataserver__pb2.ChangeDirRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

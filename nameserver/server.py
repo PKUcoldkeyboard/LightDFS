@@ -46,6 +46,8 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
 
     def stop(self):
         self.logger.info("NameServer is stopping")
+        # 更新Trie
+        db.update_trie(self.trie)
         # 通知所有DataServer停止
         for ds in self.DataServerList:
             with grpc.insecure_channel(f'{ds.host}:{ds.port}') as channel:
@@ -53,28 +55,15 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
                 stub.NotifyOffline(ds_pb2.NotifyOfflineRequest(e=1))
         self.logger.info("NameServer is stopped")
 
-    def ListFile(self, request, context):
-        # 1. 判断用户是否已经登录
-        try:
-            # 2. 判断目录是否存在
-            if not self.trie.check_dir(request.path):
-                return ns_pb2.ListFileResponse(success=0, files=[])
-            # 3. 获取目录下的文件列表
-            files = self.trie.list_dir(request.path)
-            return ns_pb2.ListFileResponse(success=1, files=files)
-        except Exception as e:
-            self.logger.error(e)
-            return ns_pb2.ListFileResponse(success=0, files=[])
-
     def RegisterDataServer(self, request, context):
-        self.DataServerList.append(DataServer(
-            request.id, request.host, request.port))
+        self.DataServerList.append(ns_pb2.DataServerInfo(
+            id=request.id, host=request.host, port=request.port))
         self.logger.info(f"DataServer {request.id} is online")
         return ns_pb2.Response(success=1, message="Register successfully!")
 
     def GetDataServerList(self, request, context):
         return ns_pb2.GetDataServerListResponse(success=1, message="Get DataServer list successfully!",
-                                                data_server_list=self.DataServerList)
+                                                dataServerInfoList=self.DataServerList)
 
     def LogoutDataServer(self, request, context):
         self.DataServerList = list(
@@ -84,30 +73,39 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
 
     def RegisterUser(self, request, context):
         success, message = db.register_user(request.username, request.password)
+        self.trie.insert(request.username, True)
         return ns_pb2.Response(success=success, message=message)
 
     def Login(self, request, context):
         # 1. 判断用户是否已经登录
         metadata = dict(context.invocation_metadata())
         jwt = metadata.get('jwt')
-        
+
         if self.verify_token(jwt):
             return ns_pb2.LoginResponse(success=0, message="User already login!", jwt='')
-        
+
         success, message = db.login(request.username, request.password)
         if success:
             jwt = self.gen_token(request.username)
             return ns_pb2.LoginResponse(success=1, message=message, jwt=jwt)
+
+        if not self.trie.search(f'/{request.username}'):
+            for ds in self.DataServerList:
+                with grpc.insecure_channel(f'{ds.host}:{ds.port}') as channel:
+                    stub = ds_pb2_grpc.DataServerStub(channel)
+                    stub.CreateDirectory(ds_pb2.CreateDirectoryRequest(
+                        path=f'/{request.username}', parent=False))
+
         return ns_pb2.LoginResponse(success=0, message=message, jwt='')
 
     def LockFile(self, request, context):
         # 1. 判断用户是否已经登录
         metadata = dict(context.invocation_metadata())
         jwt = metadata.get('jwt')
-        
+
         if not self.verify_token(jwt):
             return ns_pb2.Response(success=0, message="User already login!")
-        
+
         # 获得文件路径和锁的类型
         file_path = request.filepath
         lock_type = request.lock_type
@@ -135,7 +133,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         # 1. 判断用户是否已经登录
         metadata = dict(context.invocation_metadata())
         jwt = metadata.get('jwt')
-        
+
         if not self.verify_token(jwt):
             return ns_pb2.Response(success=0, message="User already login!")
         # 获得文件路径和锁的类型
@@ -164,6 +162,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
     def AddFile(self, request, context):
         success, message = db.create_file(
             request.absolute_path, request.size, request.is_dir, request.ctime, request.mtime)
+        self.trie.insert(request.absolute_path.split('/'), request.did)
         if success:
             return ns_pb2.Response(success=1, message=message)
         return ns_pb2.Response(success=0, message=message)
@@ -202,7 +201,13 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         if file.mtime > request.mtime:
             return ns_pb2.Response(success=0, message="File has been modified!")
         return ns_pb2.Response(success=1, message="File is up to date!")
-    
+
+    def VerifyJWT(self, request, context):
+        jwt = request.jwt
+        if self.verify_token(jwt):
+            return ns_pb2.Response(success=1, message="Verify JWT successfully!")
+        return ns_pb2.Response(success=0, message="Verify JWT failed!")
+
     # 针对用户名和密码生成token
     def gen_token(self, username):
         payload = {  # 生成payload
@@ -211,11 +216,10 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         jwt = JWT(DFS_SETTINGS['JWT_SECRET'])
         return jwt.encode(payload)
 
-
     def verify_token(self, token):
         if token is None:
             return False
-        
+
         jwt = JWT(DFS_SETTINGS['JWT_SECRET'])
         decoded_token = jwt.decode(token)
         # check

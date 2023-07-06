@@ -74,10 +74,10 @@ class NameServerStub(object):
                 request_serializer=nameserver__pb2.GetFileInfoRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.FileInfoResponse.FromString,
                 )
-        self.ListFile = channel.unary_unary(
-                '/lightdfs.NameServer/ListFile',
-                request_serializer=nameserver__pb2.ListFileRequest.SerializeToString,
-                response_deserializer=nameserver__pb2.ListFileResponse.FromString,
+        self.VerifyJWT = channel.unary_unary(
+                '/lightdfs.NameServer/VerifyJWT',
+                request_serializer=nameserver__pb2.VerifyJWTRequest.SerializeToString,
+                response_deserializer=nameserver__pb2.Response.FromString,
                 )
 
 
@@ -167,8 +167,8 @@ class NameServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ListFile(self, request, context):
-        """列出文件，对应ls命令
+    def VerifyJWT(self, request, context):
+        """验证JWT
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -237,10 +237,10 @@ def add_NameServerServicer_to_server(servicer, server):
                     request_deserializer=nameserver__pb2.GetFileInfoRequest.FromString,
                     response_serializer=nameserver__pb2.FileInfoResponse.SerializeToString,
             ),
-            'ListFile': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListFile,
-                    request_deserializer=nameserver__pb2.ListFileRequest.FromString,
-                    response_serializer=nameserver__pb2.ListFileResponse.SerializeToString,
+            'VerifyJWT': grpc.unary_unary_rpc_method_handler(
+                    servicer.VerifyJWT,
+                    request_deserializer=nameserver__pb2.VerifyJWTRequest.FromString,
+                    response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -457,7 +457,7 @@ class NameServer(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def ListFile(request,
+    def VerifyJWT(request,
             target,
             options=(),
             channel_credentials=None,
@@ -467,8 +467,8 @@ class NameServer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/ListFile',
-            nameserver__pb2.ListFileRequest.SerializeToString,
-            nameserver__pb2.ListFileResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/VerifyJWT',
+            nameserver__pb2.VerifyJWTRequest.SerializeToString,
+            nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

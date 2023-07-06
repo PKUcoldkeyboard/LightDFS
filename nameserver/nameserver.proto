@@ -27,8 +27,8 @@ service NameServer
     rpc ModifyFile(ModifyFileRequest) returns (Response);
     // 获取文件信息， 提供文件路径
     rpc GetFileInfo(GetFileInfoRequest) returns (FileInfoResponse);
-    // 列出文件，对应ls命令
-    rpc ListFile(ListFileRequest) returns (ListFileResponse) {}
+    // 验证JWT
+    rpc VerifyJWT(VerifyJWTRequest) returns (Response) {}
 }
 
 message Response
@@ -72,7 +72,7 @@ message LoginResponse
 {
     int32 success  = 1;
     string message = 2;
-    string jwt = 3;
+    string jwt     = 3;
 }
 
 message LockFileRequest
@@ -130,15 +130,7 @@ message FileInfoResponse
     string message = 6;
 }
 
-message ListFileRequest
+message VerifyJWTRequest
 {
-    int64 sequence_id = 1;
-    string path       = 2;
-}
-
-message ListFileResponse
-{
-    int64 sequence_id     = 1;
-    int32 success         = 2;
-    repeated string files = 3;
+    string jwt = 1;
 }

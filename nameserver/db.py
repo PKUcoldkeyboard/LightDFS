@@ -3,6 +3,7 @@ import pickle
 import bcrypt
 import sys
 import os
+import re
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models import User, File, Trie
 from utils.settings import DFS_SETTINGS
@@ -30,6 +31,9 @@ def get_user(username):
 
 
 def register_user(username, password):
+    # 判断用户名是否合法，只包含字母、数字、下划线，长度为1-20
+    if not re.match(r'^\w{1,20}$', username):
+        return False, 'Username is invalid!'
     # 判断用户是否存在
     key = pickle.dumps(f'USER:{username}')
     user = get_user(username)
@@ -47,6 +51,13 @@ def register_user(username, password):
 
 
 def login(username, password):
+    # 判断输入是否合法
+    if not re.match(r'^\w{1,20}$', username):
+        return False, 'Username is invalid!'
+    
+    if not re.match(r'^.{1,20}$', password):
+        return False, 'Password is invalid!'
+    
     user = get_user(username)
     if not user:
         return False, 'User not exists!'
@@ -68,8 +79,6 @@ def create_file(absolute_path, size, is_dir, ctime, mtime):
                 is_dir=is_dir, ctime=ctime, mtime=mtime)
     value = pickle.dumps(file)
     try:
-        trie = pickle.loads(db.Get(pickle.dumps('TRIE')))
-        trie.insert(absolute_path.split('/'), is_dir)
         db.Put(key, value)
     except KeyError:
         return False, 'System Error: Trie not exists!'

@@ -18,15 +18,19 @@ service DataServer
     rpc UploadFile(stream UploadFileRequest) returns (BaseResponse) {}
     rpc UploadFileWithoutSync(stream UploadFileRequest) returns (BaseResponse) {}
     // 下载文件
-    rpc DownloadFile(DownloadFileRequest) returns (stream DownloadFileResponse) {}
+    rpc DownloadFile(DownloadFileRequest) returns (DownloadFileResponse) {}
     // 复制文件或文件夹
     rpc CopyFile(CopyFileRequest) returns (BaseResponse) {}
     // 写文件
-    rpc WriteFile(stream UploadFileRequest) returns (BaseResponse) {}
+    rpc WriteFile(stream WriteFileRequest) returns (BaseResponse) {}
     // 打开文件
     rpc OpenFile(OpenFileRequest) returns (BaseResponse) {}
     // 通知下线
     rpc NotifyOffline(NotifyOfflineRequest) returns (BaseResponse) {}
+    // 列出文件，对应ls命令
+    rpc ListFile(ListFileRequest) returns (ListFileResponse) {}
+    // ChangeDir
+    rpc ChangeDir(ChangeDirRequest) returns (BaseResponse) {}
 }
 
 message BaseResponse
@@ -41,6 +45,8 @@ message CreateFileRequest
 {
     int64 sequence_id = 1;
     string path       = 2;
+    float ctime       = 3;
+    float mtime       = 4;
 }
 
 message CreateDirectoryRequest
@@ -115,3 +121,28 @@ message OpenFileRequest
     string path       = 2;
 }
 
+message WriteFileRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+    bytes content     = 3;
+}
+
+message ListFileRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+}
+
+message ListFileResponse
+{
+    int64 sequence_id     = 1;
+    int32 success         = 2;
+    repeated string files = 3;
+}
+
+message ChangeDirRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+}

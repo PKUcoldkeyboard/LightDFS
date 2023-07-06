@@ -83,6 +83,14 @@ class Trie(object):
                 return None
         return node
 
+    def search(self, path):
+        node = self.root
+        for part in path:
+            if part not in node.children:
+                return False
+            node = node.children[part]
+        return node.end_of_path
+
     def get_children(self, path):
         node = self.root
         for part in path:

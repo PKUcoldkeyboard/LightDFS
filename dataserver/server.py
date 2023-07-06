@@ -15,6 +15,7 @@ import dataserver_pb2_grpc as ds_grpc
 import dataserver_pb2 as ds_pb2
 
 
+
 class DataServerServicer(ds_grpc.DataServerServicer):
     def __init__(self, id=None, host=None, port=None, data_dir=None):
         self.id = id
@@ -22,8 +23,16 @@ class DataServerServicer(ds_grpc.DataServerServicer):
         self.port = port
         self.data_dir = data_dir
 
+        # 如果数据目录不存在则创建
+        if not os.path.exists(self.data_dir):
+            os.makedirs(self.data_dir)
+
+        # 如果日志目录不存在则创建
+        if not os.path.exists(DFS_SETTINGS['LOG_CONFIG']['LOG_DIR']):
+            os.makedirs(DFS_SETTINGS['LOG_CONFIG']['LOG_DIR'])
+
         logger_path = DFS_SETTINGS['LOG_CONFIG']['LOG_DIR'] + \
-            f'dataserver_{self.id}.log'
+            f'/dataserver_{self.id}.log'
         logger_level = DFS_SETTINGS['LOG_CONFIG']['LOG_LEVEL']
         log_to_console = DFS_SETTINGS['LOG_CONFIG']['LOG_TO_CONSOLE']
         log_to_file = DFS_SETTINGS['LOG_CONFIG']['LOG_TO_FILE']
@@ -31,10 +40,6 @@ class DataServerServicer(ds_grpc.DataServerServicer):
             log_to_console=log_to_console, log_file_path=logger_path, log_to_file=log_to_file, level=logger_level)
         self.logger.info(
             f"DataServer {self.host} is starting, listen port: {self.port}")
-
-        # 如果数据目录不存在则创建
-        if not os.path.exists(self.data_dir):
-            os.makedirs(self.data_dir)
 
         # 连接NameServer
         channel_string = f'{DFS_SETTINGS["NAMESERVER"]["HOST"]}:{DFS_SETTINGS["NAMESERVER"]["PORT"]}'
@@ -48,11 +53,44 @@ class DataServerServicer(ds_grpc.DataServerServicer):
             self.logger.error(response.message)
         else:
             self.logger.info(response.message)
+            
+    def ListFile(self, request, context):
+        self.logger.info(f"ls {request.path} - {request.sequence_id}")
+        try:
+            metadata = dict(context.invocation_metadata())
+            jwt = metadata.get('jwt', '')
+            
+            if not jwt:
+                return ds_pb2.ListFileResponse(success=0, sequence_id=request.sequence_id, files=[])
+            else:
+                response = self.stub.VerifyJWT(ns_pb2.VerifyJWTRequest(jwt=jwt))
+                if not response.success:
+                    return ds_pb2.ListFileResponse(success=0, sequence_id=request.sequence_id, files=[])
+            file_path = f'{self.data_dir}{request.path}'
+            files = os.listdir(file_path)
+        except grpc.RpcError:
+            self.logger.error('RPC Error!')
+            return ds_pb2.ListFileResponse(success=0, sequence_id=request.sequence_id, files=[])
+        except Exception as e:
+            self.logger.error(e)
+        return ds_pb2.ListFileResponse(success=1, sequence_id=request.sequence_id, files=files)
 
     def CreateFile(self, request, context):
         self.logger.info(f"touch {request.path} - {request.sequence_id}")
-        file_path = f'{self.data_dir}{request.path}'
         try:
+            metadata = dict(context.invocation_metadata())
+            # 从元数据中获取JWT
+            jwt = metadata.get('jwt', '')
+
+            if not jwt:
+                return ds_pb2.BaseResponse(success=0, message='Need to login!', sequence_id=request.sequence_id)
+            else:
+                # 验证JWT
+                response = self.stub.VerifyJWT(ns_pb2.VerifyJWTRequest(jwt=jwt))
+                if not response.success:
+                    return ds_pb2.BaseResponse(success=0, message=response.message, sequence_id=request.sequence_id)
+
+            file_path = f'{self.data_dir}{request.path}'
             with open(file_path, 'w') as f:
                 pass
             self.stub.AddFile(ns_pb2.FileInfo(absolute_path=request.path,
@@ -218,22 +256,53 @@ class DataServerServicer(ds_grpc.DataServerServicer):
         path = f'{self.data_dir}{request.path}'
         # 判断路径是否存在
         if not os.path.exists(path):
-            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
+            return ds_pb2.DownloadFileResponse(success=0, content='', sequence_id=request.sequence_id)
 
         # 读取文件bytes
         try:
             with open(path, 'rb') as f:
                 content = f.read()
         except Exception as e:
-            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
+            return ds_pb2.DownloadFileResponse(success=0, content='', sequence_id=request.sequence_id)
         return ds_pb2.DownloadFileResponse(success=1, content=content, sequence_id=request.sequence_id)
 
-    
     def NotifyOffline(self, request, context):
         self.logger.info(f"notify offline...")
         # 收到消息后，关闭服务器
         os.kill(os.getpid(), signal.SIGINT)
-        return ds_pb2.BaseResponse(success=1, message='Notify offline successfully! ', sequence_id=request.sequence_id)
+        return ds_pb2.BaseResponse(success=1, message='Notify offline successfully! ')
+
+    def WriteFile(self, request_iterator, context):
+        self.logger.info(f"write file... - {request_iterator.sequence_id}")
+        path = f'{self.data_dir}{request_iterator.path}'
+        content = request_iterator.content
+        # 判断路径是否存在
+        if not os.path.exists(os.path.dirname(path)):
+            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request_iterator.sequence_id)
+
+        try:
+            # 覆盖写
+            with open(path, 'wb') as f:
+                f.write(content)
+        except Exception as e:
+            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request_iterator.sequence_id)
+        return ds_pb2.BaseResponse(success=1, message='Write file successfully! ', sequence_id=request_iterator.sequence_id)
+
+    def OpenFile(self, request, context):
+        self.logger.info(f"open file... - {request.sequence_id}")
+        
+    def ChangeDir(self, request, context):
+        self.logger.info(f"change dir... - {request.sequence_id}")
+        path = f'{self.data_dir}{request.path}'
+        if not os.path.exists(path):
+            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
+        
+        if not os.path.isdir(path):
+            return ds_pb2.BaseResponse(success=0, message='Path is not a directory!', sequence_id=request.sequence_id)
+        
+        return ds_pb2.BaseResponse(success=1, message='Change dir successfully! ', sequence_id=request.sequence_id)
+            
+
 
 def start_server():
     id = getId()
