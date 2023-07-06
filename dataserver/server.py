@@ -2,6 +2,7 @@ import grpc
 import os
 import sys
 import shutil
+import signal
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'nameserver'))
 from concurrent import futures
@@ -227,6 +228,12 @@ class DataServerServicer(ds_grpc.DataServerServicer):
             return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
         return ds_pb2.DownloadFileResponse(success=1, content=content, sequence_id=request.sequence_id)
 
+    
+    def NotifyOffline(self, request, context):
+        self.logger.info(f"notify offline...")
+        # 收到消息后，关闭服务器
+        os.kill(os.getpid(), signal.SIGINT)
+        return ds_pb2.BaseResponse(success=1, message='Notify offline successfully! ', sequence_id=request.sequence_id)
 
 def start_server():
     id = getId()

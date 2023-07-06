@@ -21,6 +21,12 @@ service DataServer
     rpc DownloadFile(DownloadFileRequest) returns (stream DownloadFileResponse) {}
     // 复制文件或文件夹
     rpc CopyFile(CopyFileRequest) returns (BaseResponse) {}
+    // 写文件
+    rpc WriteFile(stream UploadFileRequest) returns (BaseResponse) {}
+    // 打开文件
+    rpc OpenFile(OpenFileRequest) returns (BaseResponse) {}
+    // 通知下线
+    rpc NotifyOffline(NotifyOfflineRequest) returns (BaseResponse) {}
 }
 
 message BaseResponse
@@ -97,3 +103,15 @@ message CopyFileRequest
     string dst        = 3;
     bool recursive    = 4;
 }
+
+message NotifyOfflineRequest
+{
+    int32 e = 1;
+}
+
+message OpenFileRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+}
+
