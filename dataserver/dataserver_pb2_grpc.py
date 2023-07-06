@@ -19,11 +19,6 @@ class DataServerStub(object):
                 request_serializer=dataserver__pb2.CreateFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.ListFile = channel.unary_unary(
-                '/lightdfs.DataServer/ListFile',
-                request_serializer=dataserver__pb2.ListFileRequest.SerializeToString,
-                response_deserializer=dataserver__pb2.ListFileResponse.FromString,
-                )
         self.CreateDirectory = channel.unary_unary(
                 '/lightdfs.DataServer/CreateDirectory',
                 request_serializer=dataserver__pb2.CreateDirectoryRequest.SerializeToString,
@@ -71,13 +66,6 @@ class DataServerServicer(object):
 
     def CreateFile(self, request, context):
         """创建文件，对应touch命令
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def ListFile(self, request, context):
-        """列出文件，对应ls命令
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -146,11 +134,6 @@ def add_DataServerServicer_to_server(servicer, server):
                     request_deserializer=dataserver__pb2.CreateFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'ListFile': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListFile,
-                    request_deserializer=dataserver__pb2.ListFileRequest.FromString,
-                    response_serializer=dataserver__pb2.ListFileResponse.SerializeToString,
-            ),
             'CreateDirectory': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateDirectory,
                     request_deserializer=dataserver__pb2.CreateDirectoryRequest.FromString,
@@ -215,23 +198,6 @@ class DataServer(object):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/CreateFile',
             dataserver__pb2.CreateFileRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def ListFile(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/ListFile',
-            dataserver__pb2.ListFileRequest.SerializeToString,
-            dataserver__pb2.ListFileResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
