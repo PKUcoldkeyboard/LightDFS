@@ -78,17 +78,16 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
     def Login(self, request, context):
         # 1. 判断用户是否已经登录
         metadata = dict(context.invocation_metadata())
-        jwt = metadata.get('jwt')[0]
+        jwt = metadata.get('jwt')
         
         if self.verify_token(jwt):
-            return ns_pb2.Response(success=0, message="User already login!")
+            return ns_pb2.LoginResponse(success=0, message="User already login!", jwt='')
         
         success, message = db.login(request.username, request.password)
         if success:
             jwt = self.gen_token(request.username)
-            context.set_trailing_metadata(('jwt', jwt))
-            return ns_pb2.Response(success=1, message=message)
-        return ns_pb2.Response(success=0, message=message)
+            return ns_pb2.LoginResponse(success=1, message=message, jwt=jwt)
+        return ns_pb2.LoginResponse(success=0, message=message, jwt='')
 
     def LockFile(self, request, context):
         # 1. 判断用户是否已经登录
@@ -194,7 +193,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         return ns_pb2.Response(success=1, message="File is up to date!")
     
     # 针对用户名和密码生成token
-    def gen_token(username):
+    def gen_token(self, username):
         payload = {  # 生成payload
             'username': username,
         }
@@ -202,7 +201,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
         return jwt.encode(payload)
 
 
-    def verify_token(token):
+    def verify_token(self, token):
         if token is None:
             return False
         

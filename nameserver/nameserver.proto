@@ -13,7 +13,7 @@ service NameServer
     // 注册用户
     rpc RegisterUser(RegisterRequest) returns (Response);
     // 登录
-    rpc Login(LoginRequest) returns (Response);
+    rpc Login(LoginRequest) returns (LoginResponse);
     // 文件锁，lock_type: 0:读锁，1:写锁
     rpc LockFile(LockFileRequest) returns (Response);
     rpc UnlockFile(UnlockFileRequest) returns (Response);
@@ -66,6 +66,13 @@ message LoginRequest
 {
     string username = 1;
     string password = 2;
+}
+
+message LoginResponse
+{
+    int32 success  = 1;
+    string message = 2;
+    string jwt = 3;
 }
 
 message LockFileRequest

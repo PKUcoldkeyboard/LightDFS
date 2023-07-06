@@ -35,11 +35,8 @@ class Client():
         return response
 
     def login(self, username, password):
-        response = self.ns_stub.Login(
-            ns_pb2.LoginRequest(username=username, password=password)
-        )
+        response = self.ns_stub.Login(ns_pb2.LoginRequest(username=username, password=password))
         return response
-
 
     def touch(self, path):
         try:
@@ -186,7 +183,6 @@ if __name__ == "__main__":
             if x == 1:
                 uname = input('请输入用户名:')
                 passwd = input('请输入密码：')
-                metadata = (('jwt', ))
                 response = client.login(uname, passwd)
                 success, message = response.success, response.message
                 if success:
