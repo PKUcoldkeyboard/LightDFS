@@ -59,6 +59,21 @@ class DataServerStub(object):
                 request_serializer=dataserver__pb2.CopyFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
+        self.WriteFile = channel.stream_unary(
+                '/lightdfs.DataServer/WriteFile',
+                request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.OpenFile = channel.unary_unary(
+                '/lightdfs.DataServer/OpenFile',
+                request_serializer=dataserver__pb2.OpenFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.NotifyOffline = channel.unary_unary(
+                '/lightdfs.DataServer/NotifyOffline',
+                request_serializer=dataserver__pb2.NotifyOfflineRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
 
 
 class DataServerServicer(object):
@@ -126,6 +141,27 @@ class DataServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def WriteFile(self, request_iterator, context):
+        """写文件
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def OpenFile(self, request, context):
+        """打开文件
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def NotifyOffline(self, request, context):
+        """通知下线
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DataServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -172,6 +208,21 @@ def add_DataServerServicer_to_server(servicer, server):
             'CopyFile': grpc.unary_unary_rpc_method_handler(
                     servicer.CopyFile,
                     request_deserializer=dataserver__pb2.CopyFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'WriteFile': grpc.stream_unary_rpc_method_handler(
+                    servicer.WriteFile,
+                    request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'OpenFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.OpenFile,
+                    request_deserializer=dataserver__pb2.OpenFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'NotifyOffline': grpc.unary_unary_rpc_method_handler(
+                    servicer.NotifyOffline,
+                    request_deserializer=dataserver__pb2.NotifyOfflineRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
     }
@@ -333,6 +384,57 @@ class DataServer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/CopyFile',
             dataserver__pb2.CopyFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def WriteFile(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/WriteFile',
+            dataserver__pb2.UploadFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def OpenFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/OpenFile',
+            dataserver__pb2.OpenFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NotifyOffline(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/NotifyOffline',
+            dataserver__pb2.NotifyOfflineRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
