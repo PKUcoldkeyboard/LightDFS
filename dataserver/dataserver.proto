@@ -18,6 +18,7 @@ service DataServer
     rpc ReadFile(ReadFileRequest) returns (ReadFileResponse) {}
     // 上传文件
     rpc UploadFile(stream UploadFileRequest) returns (BaseResponse) {}
+    rpc UploadFileWithoutSync(stream UploadFileRequest) returns (BaseResponse) {}
     // 下载文件
     rpc DownloadFile(DownloadFileRequest) returns (stream DownloadFileResponse) {}
     // 复制文件或文件夹

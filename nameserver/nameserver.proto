@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package lightdfs;
 
-service nameserver
+service NameServer
 {
     // 注册数据服务器
     rpc RegisterDataServer(DataServerInfo) returns (Response);
@@ -14,31 +14,33 @@ service nameserver
     rpc RegisterUser(RegisterRequest) returns (Response);
     // 登录
     rpc Login(LoginRequest) returns (Response);
-    // 文件锁
+    // 登出
+    rpc Logout(LogoutRequest) returns (Response);
+    // 文件锁，lock_type: 0:读锁，1:写锁
     rpc LockFile(LockFileRequest) returns (Response);
     rpc UnlockFile(UnlockFileRequest) returns (Response);
-    // 检查文件权限
-    rpc CheckFilePermission(CheckFilePermissionRequest) returns (Response);
     // 检查缓存
     rpc CheckCache(CheckCacheRequest) returns (Response);
-    // 更改文件拥有者
-    rpc ChownFile(ChownFileRequest) returns (Response);
-    // 更改文件权限
-    rpc ChmodFile(ChmodFileRequest) returns (Response);
-    // 更改文件所属组
-    rpc ChangeGroup(ChangeGroupRequest) returns (Response);
+    // 添加新文件（夹）,提供完整文件信息
+    rpc AddFile(FileInfo) returns (Response);
+    // 删除文件（夹），提供文件路径
+    rpc DeleteFile(DeleteRequest) returns (Response);
+    // 修改文件（夹），提供原始文件路径，新文件路径，新文件大小，修改时间
+    rpc ModifyFile(ModifyFileRequest) returns (Response);
+    // 获取文件信息， 提供文件路径
+    rpc GetFileInfo(GetFileInfoRequest) returns (FileInfoResponse);
 }
 
 message Response
 {
-    int32 code = 1;
-    string msg = 2;
+    int32 success = 1;
+    string message = 2;
 }
 
 message DataServerInfo
 {
     int64 id   = 1;
-    string ip  = 2;
+    string host  = 2;
     int32 port = 3;
 }
 
@@ -49,8 +51,8 @@ message empty
 
 message GetDataServerListResponse
 {
-    int32 code                                 = 1;
-    string msg                                 = 2;
+    int32 success                              = 1;
+    string message                             = 2;
     repeated DataServerInfo dataServerInfoList = 3;
 }
 
@@ -58,7 +60,6 @@ message RegisterRequest
 {
     string username = 1;
     string password = 2;
-    string group    = 3;
 }
 
 message LoginRequest
@@ -67,82 +68,67 @@ message LoginRequest
     string password = 2;
 }
 
-message SetFilePermissionRequest
+message LogoutRequest
 {
-    string username  = 1;
-    string filename  = 2;
-    string group     = 3;
-    int32 permission = 4;
+    string username = 1;
 }
+
 
 message LockFileRequest
 {
     string username = 1;
-    string filepath = 2;
+    int32 lock_type = 2;
+    string filepath = 3;
 }
 
 message UnlockFileRequest
 {
     string username = 1;
-    string filepath = 2;
+    int32 lock_type = 2;
+    string filepath = 3;
 }
 
-message CheckFilePermissionRequest
-{
-    string username = 1;
-    string filepath = 2;
-}
 
 message CheckCacheRequest
 {
-    string filepath  = 1;
-    string timestamp = 2;
+    string absolute_path  = 1;
+    string mtime = 2;
 }
 
-message ChownFileRequest
-{
-    int64 sequence_id = 1;
-    string path       = 2;
-    string owner      = 3;
-}
-
-message ChangeGroupRequest
-{
-    int64 sequence_id = 1;
-    string path       = 2;
-    string group      = 3;
-}
-
-message ChmodFileRequest
-{
-    int64 sequence_id = 1;
-    string path       = 2;
-    string permission = 3;
-}
 
 message GetFileInfoRequest
 {
-    int64 sequence_id = 1;
-    string path       = 2;
+    string absolute_path = 1;
 }
 
 message FileInfo
 {
-    int64 fid         = 1;
-    string name       = 2;
-    string path       = 3;
-    string owner      = 4;
-    string group      = 5;
-    string permission = 6;
-    int64 size        = 7;
-    int64 ctime       = 8;
-    int64 mtime       = 9;
-    bool mode         = 10;
+    string absolute_path = 1;
+    int64 size           = 2;
+    bool is_dir          = 3;
+    int64 ctime          = 4;
+    int64 mtime          = 5;
 }
 
-message GetFileInfoResponse
+message DeleteRequest
 {
-    int64 sequence_id = 1;
-    int32 success     = 2;
-    FileInfo info     = 3;
+    string absolute_path = 1;
+}
+
+message ModifyFileRequest
+{
+    string old_absolute_path = 1;
+    string new_absolute_path = 2;
+    int64 new_size           = 3;
+    int64 mtime              = 4;
+}
+
+message FileInfoResponse
+{
+    int64 size           = 1;
+    bool is_dir          = 2;
+    int64 ctime          = 3;
+    int64 mtime          = 4;
+    int32 success        = 5;
+    string message       = 6;
 }

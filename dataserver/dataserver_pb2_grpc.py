@@ -49,6 +49,11 @@ class DataServerStub(object):
                 request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
+        self.UploadFileWithoutSync = channel.stream_unary(
+                '/lightdfs.DataServer/UploadFileWithoutSync',
+                request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
         self.DownloadFile = channel.unary_stream(
                 '/lightdfs.DataServer/DownloadFile',
                 request_serializer=dataserver__pb2.DownloadFileRequest.SerializeToString,
@@ -113,6 +118,12 @@ class DataServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def UploadFileWithoutSync(self, request_iterator, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def DownloadFile(self, request, context):
         """下载文件
         """
@@ -162,6 +173,11 @@ def add_DataServerServicer_to_server(servicer, server):
             ),
             'UploadFile': grpc.stream_unary_rpc_method_handler(
                     servicer.UploadFile,
+                    request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'UploadFileWithoutSync': grpc.stream_unary_rpc_method_handler(
+                    servicer.UploadFileWithoutSync,
                     request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
@@ -299,6 +315,23 @@ class DataServer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/UploadFile',
+            dataserver__pb2.UploadFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UploadFileWithoutSync(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/UploadFileWithoutSync',
             dataserver__pb2.UploadFileRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,

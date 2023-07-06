@@ -5,7 +5,7 @@ import grpc
 import nameserver_pb2 as nameserver__pb2
 
 
-class nameserverStub(object):
+class NameServerStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,68 +15,73 @@ class nameserverStub(object):
             channel: A grpc.Channel.
         """
         self.RegisterDataServer = channel.unary_unary(
-                '/lightdfs.nameserver/RegisterDataServer',
+                '/lightdfs.NameServer/RegisterDataServer',
                 request_serializer=nameserver__pb2.DataServerInfo.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.GetDataServerList = channel.unary_unary(
-                '/lightdfs.nameserver/GetDataServerList',
+                '/lightdfs.NameServer/GetDataServerList',
                 request_serializer=nameserver__pb2.empty.SerializeToString,
                 response_deserializer=nameserver__pb2.GetDataServerListResponse.FromString,
                 )
         self.LogoutDataServer = channel.unary_unary(
-                '/lightdfs.nameserver/LogoutDataServer',
+                '/lightdfs.NameServer/LogoutDataServer',
                 request_serializer=nameserver__pb2.DataServerInfo.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.RegisterUser = channel.unary_unary(
-                '/lightdfs.nameserver/RegisterUser',
+                '/lightdfs.NameServer/RegisterUser',
                 request_serializer=nameserver__pb2.RegisterRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.Login = channel.unary_unary(
-                '/lightdfs.nameserver/Login',
+                '/lightdfs.NameServer/Login',
                 request_serializer=nameserver__pb2.LoginRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
+        self.Logout = channel.unary_unary(
+                '/lightdfs.NameServer/Logout',
+                request_serializer=nameserver__pb2.LogoutRequest.SerializeToString,
+                response_deserializer=nameserver__pb2.Response.FromString,
+                )
         self.LockFile = channel.unary_unary(
-                '/lightdfs.nameserver/LockFile',
+                '/lightdfs.NameServer/LockFile',
                 request_serializer=nameserver__pb2.LockFileRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
         self.UnlockFile = channel.unary_unary(
-                '/lightdfs.nameserver/UnlockFile',
+                '/lightdfs.NameServer/UnlockFile',
                 request_serializer=nameserver__pb2.UnlockFileRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
-        self.CheckFilePermission = channel.unary_unary(
-                '/lightdfs.nameserver/CheckFilePermission',
-                request_serializer=nameserver__pb2.CheckFilePermissionRequest.SerializeToString,
-                response_deserializer=nameserver__pb2.Response.FromString,
-                )
         self.CheckCache = channel.unary_unary(
-                '/lightdfs.nameserver/CheckCache',
+                '/lightdfs.NameServer/CheckCache',
                 request_serializer=nameserver__pb2.CheckCacheRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
-        self.ChownFile = channel.unary_unary(
-                '/lightdfs.nameserver/ChownFile',
-                request_serializer=nameserver__pb2.ChownFileRequest.SerializeToString,
+        self.AddFile = channel.unary_unary(
+                '/lightdfs.NameServer/AddFile',
+                request_serializer=nameserver__pb2.FileInfo.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
-        self.ChmodFile = channel.unary_unary(
-                '/lightdfs.nameserver/ChmodFile',
-                request_serializer=nameserver__pb2.ChmodFileRequest.SerializeToString,
+        self.DeleteFile = channel.unary_unary(
+                '/lightdfs.NameServer/DeleteFile',
+                request_serializer=nameserver__pb2.DeleteRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
                 )
-        self.ChangeGroup = channel.unary_unary(
-                '/lightdfs.nameserver/ChangeGroup',
-                request_serializer=nameserver__pb2.ChangeGroupRequest.SerializeToString,
+        self.ModifyFile = channel.unary_unary(
+                '/lightdfs.NameServer/ModifyFile',
+                request_serializer=nameserver__pb2.ModifyFileRequest.SerializeToString,
                 response_deserializer=nameserver__pb2.Response.FromString,
+                )
+        self.GetFileInfo = channel.unary_unary(
+                '/lightdfs.NameServer/GetFileInfo',
+                request_serializer=nameserver__pb2.GetFileInfoRequest.SerializeToString,
+                response_deserializer=nameserver__pb2.FileInfoResponse.FromString,
                 )
 
 
-class nameserverServicer(object):
+class NameServerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def RegisterDataServer(self, request, context):
@@ -114,8 +119,15 @@ class nameserverServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Logout(self, request, context):
+        """登出
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def LockFile(self, request, context):
-        """文件锁
+        """文件锁，lock_type: 0:读锁，1:写锁
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -127,13 +139,6 @@ class nameserverServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def CheckFilePermission(self, request, context):
-        """检查文件权限
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def CheckCache(self, request, context):
         """检查缓存
         """
@@ -141,29 +146,36 @@ class nameserverServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ChownFile(self, request, context):
-        """更改文件拥有者
+    def AddFile(self, request, context):
+        """添加新文件（夹）,提供完整文件信息
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ChmodFile(self, request, context):
-        """更改文件权限
+    def DeleteFile(self, request, context):
+        """删除文件（夹），提供文件路径
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ChangeGroup(self, request, context):
-        """更改文件所属组
+    def ModifyFile(self, request, context):
+        """修改文件（夹），提供原始文件路径，新文件路径，新文件大小，修改时间
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetFileInfo(self, request, context):
+        """获取文件信息， 提供文件路径
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_nameserverServicer_to_server(servicer, server):
+def add_NameServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RegisterDataServer': grpc.unary_unary_rpc_method_handler(
                     servicer.RegisterDataServer,
@@ -190,6 +202,11 @@ def add_nameserverServicer_to_server(servicer, server):
                     request_deserializer=nameserver__pb2.LoginRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
+            'Logout': grpc.unary_unary_rpc_method_handler(
+                    servicer.Logout,
+                    request_deserializer=nameserver__pb2.LogoutRequest.FromString,
+                    response_serializer=nameserver__pb2.Response.SerializeToString,
+            ),
             'LockFile': grpc.unary_unary_rpc_method_handler(
                     servicer.LockFile,
                     request_deserializer=nameserver__pb2.LockFileRequest.FromString,
@@ -200,39 +217,39 @@ def add_nameserverServicer_to_server(servicer, server):
                     request_deserializer=nameserver__pb2.UnlockFileRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
-            'CheckFilePermission': grpc.unary_unary_rpc_method_handler(
-                    servicer.CheckFilePermission,
-                    request_deserializer=nameserver__pb2.CheckFilePermissionRequest.FromString,
-                    response_serializer=nameserver__pb2.Response.SerializeToString,
-            ),
             'CheckCache': grpc.unary_unary_rpc_method_handler(
                     servicer.CheckCache,
                     request_deserializer=nameserver__pb2.CheckCacheRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
-            'ChownFile': grpc.unary_unary_rpc_method_handler(
-                    servicer.ChownFile,
-                    request_deserializer=nameserver__pb2.ChownFileRequest.FromString,
+            'AddFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddFile,
+                    request_deserializer=nameserver__pb2.FileInfo.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
-            'ChmodFile': grpc.unary_unary_rpc_method_handler(
-                    servicer.ChmodFile,
-                    request_deserializer=nameserver__pb2.ChmodFileRequest.FromString,
+            'DeleteFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteFile,
+                    request_deserializer=nameserver__pb2.DeleteRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
             ),
-            'ChangeGroup': grpc.unary_unary_rpc_method_handler(
-                    servicer.ChangeGroup,
-                    request_deserializer=nameserver__pb2.ChangeGroupRequest.FromString,
+            'ModifyFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.ModifyFile,
+                    request_deserializer=nameserver__pb2.ModifyFileRequest.FromString,
                     response_serializer=nameserver__pb2.Response.SerializeToString,
+            ),
+            'GetFileInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetFileInfo,
+                    request_deserializer=nameserver__pb2.GetFileInfoRequest.FromString,
+                    response_serializer=nameserver__pb2.FileInfoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'lightdfs.nameserver', rpc_method_handlers)
+            'lightdfs.NameServer', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class nameserver(object):
+class NameServer(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -246,7 +263,7 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/RegisterDataServer',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/RegisterDataServer',
             nameserver__pb2.DataServerInfo.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -263,7 +280,7 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/GetDataServerList',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/GetDataServerList',
             nameserver__pb2.empty.SerializeToString,
             nameserver__pb2.GetDataServerListResponse.FromString,
             options, channel_credentials,
@@ -280,7 +297,7 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/LogoutDataServer',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/LogoutDataServer',
             nameserver__pb2.DataServerInfo.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -297,7 +314,7 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/RegisterUser',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/RegisterUser',
             nameserver__pb2.RegisterRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -314,8 +331,25 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/Login',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/Login',
             nameserver__pb2.LoginRequest.SerializeToString,
+            nameserver__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Logout(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/Logout',
+            nameserver__pb2.LogoutRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -331,7 +365,7 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/LockFile',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/LockFile',
             nameserver__pb2.LockFileRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
@@ -348,25 +382,8 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/UnlockFile',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/UnlockFile',
             nameserver__pb2.UnlockFileRequest.SerializeToString,
-            nameserver__pb2.Response.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def CheckFilePermission(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/CheckFilePermission',
-            nameserver__pb2.CheckFilePermissionRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -382,14 +399,14 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/CheckCache',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/CheckCache',
             nameserver__pb2.CheckCacheRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def ChownFile(request,
+    def AddFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -399,14 +416,14 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/ChownFile',
-            nameserver__pb2.ChownFileRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/AddFile',
+            nameserver__pb2.FileInfo.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def ChmodFile(request,
+    def DeleteFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -416,14 +433,14 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/ChmodFile',
-            nameserver__pb2.ChmodFileRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/DeleteFile',
+            nameserver__pb2.DeleteRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def ChangeGroup(request,
+    def ModifyFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -433,8 +450,25 @@ class nameserver(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lightdfs.nameserver/ChangeGroup',
-            nameserver__pb2.ChangeGroupRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/ModifyFile',
+            nameserver__pb2.ModifyFileRequest.SerializeToString,
             nameserver__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetFileInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.NameServer/GetFileInfo',
+            nameserver__pb2.GetFileInfoRequest.SerializeToString,
+            nameserver__pb2.FileInfoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
