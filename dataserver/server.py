@@ -198,13 +198,13 @@ class DataServerServicer(ds_grpc.DataServerServicer):
             return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
         return ds_pb2.BaseResponse(success=1, message='Copy file successfully! ', sequence_id=request.sequence_id)
 
-    def UploadFile(self, request_iterator, context):
-        self.logger.info(f"upload file... - {request_iterator.sequence_id}")
-        path = f'{self.data_dir}{request_iterator.path}'
-        content = request_iterator.content
+    def UploadFile(self, request, context):
+        self.logger.info(f"upload file... - {request.sequence_id}")
+        path = f'{self.data_dir}{request.path}'
+        content = request.content
         # 判断路径是否存在
         if not os.path.exists(os.path.dirname(path)):
-            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request_iterator.sequence_id)
+            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
 
         # 写入文件bytes
         try:
@@ -226,30 +226,30 @@ class DataServerServicer(ds_grpc.DataServerServicer):
                 temp_stub = ds_grpc.DataServerStub(temp_channel)
 
                 response = temp_stub.UploadFileWithoutSync(ds_pb2.UploadFileRequest(
-                    path=request_iterator.path, content=request_iterator.content, sequence_id=getId()))
+                    path=request.path, content=request.content, sequence_id=getId()))
 
         except grpc.RpcError as e:
-            return ds_pb2.BaseResponse(success=0, message='RPC Connection Timeout!', sequence_id=request_iterator.sequence_id)
+            return ds_pb2.BaseResponse(success=0, message='RPC Connection Timeout!', sequence_id=request.sequence_id)
         except Exception as e:
-            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request_iterator.sequence_id)
-        return ds_pb2.BaseResponse(success=1, message='Upload file successfully! ', sequence_id=request_iterator.sequence_id)
+            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
+        return ds_pb2.BaseResponse(success=1, message='Upload file successfully! ', sequence_id=request.sequence_id)
 
-    def UploadFileWithoutSync(self, request_iterator, context):
+    def UploadFileWithoutSync(self, request, context):
         self.logger.info(
-            f"upload file without sync... - {request_iterator.sequence_id}")
-        path = f'{self.data_dir}{request_iterator.path}'
-        content = request_iterator.content
+            f"upload file without sync... - {request.sequence_id}")
+        path = f'{self.data_dir}{request.path}'
+        content = request.content
         # 判断路径是否存在
         if not os.path.exists(os.path.dirname(path)):
-            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request_iterator.sequence_id)
+            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
 
         # 写入文件bytes
         try:
             with open(path, 'wb') as f:
                 f.write(content)
         except Exception as e:
-            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request_iterator.sequence_id)
-        return ds_pb2.BaseResponse(success=1, message='Upload file successfully! ', sequence_id=request_iterator.sequence_id)
+            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
+        return ds_pb2.BaseResponse(success=1, message='Upload file successfully! ', sequence_id=request.sequence_id)
 
     def DownloadFile(self, request, context):
         self.logger.info(f"download file... - {request.sequence_id}")
@@ -272,25 +272,65 @@ class DataServerServicer(ds_grpc.DataServerServicer):
         os.kill(os.getpid(), signal.SIGINT)
         return ds_pb2.BaseResponse(success=1, message='Notify offline successfully! ')
 
-    def WriteFile(self, request_iterator, context):
-        self.logger.info(f"write file... - {request_iterator.sequence_id}")
-        path = f'{self.data_dir}{request_iterator.path}'
-        content = request_iterator.content
+    def WriteFile(self, request, context):
+        self.logger.info(f"write file... - {request.sequence_id}")
+        path = f'{self.data_dir}{request.path}'
+        content = request.content
         # 判断路径是否存在
         if not os.path.exists(os.path.dirname(path)):
-            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request_iterator.sequence_id)
+            return ds_pb2.BaseResponse(success=0, message='Path not found!', sequence_id=request.sequence_id)
 
         try:
             # 覆盖写
             with open(path, 'wb') as f:
                 f.write(content)
         except Exception as e:
-            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request_iterator.sequence_id)
-        return ds_pb2.BaseResponse(success=1, message='Write file successfully! ', sequence_id=request_iterator.sequence_id)
+            return ds_pb2.BaseResponse(success=0, message=str(e), sequence_id=request.sequence_id)
+        return ds_pb2.BaseResponse(success=1, message='Write file successfully! ', sequence_id=request.sequence_id)
 
     def OpenFile(self, request, context):
         self.logger.info(f"open file... - {request.sequence_id}")
+        path = f'{self.data_dir}{request.path}'
+        if not os.path.exists(path):
+            return ds_pb2.BaseResponse(success=0, message='File Path not exist', sequence_id=request.sequence_id)
         
+        if not os.path.isfile(path):
+            return ds_pb2.BaseResponse(success=0, message='Is not a file', sequence_id=request.sequence_id)
+        
+        # 向NameServer请求加锁
+        try:
+            metadata = context.invocation_metadata()
+            response = self.stub.LockFile(ns_pb2.LockFileRequest(lock_type=1, filepath=request.path), metadata=metadata)
+            if response.success == 0:
+                return ds_pb2.BaseResponse(success=0, message='File is locked', sequence_id=request.sequence_id)
+        except grpc.RpcError as e:
+            self.logger.error(e)
+            return ds_pb2.BaseResponse(success=0, message='RPC Error', sequence_id=request.sequence_id)
+        
+        return ds_pb2.BaseResponse(success=1, message='Open File Successfully', sequence_id=request.sequence_id)
+    
+    
+    def CloseFile(self, request, context):
+        self.logger.info(f"close file... - {request.sequence_id}")
+        path = f'{self.data_dir}{request.path}'
+        if not os.path.exists(path):
+            return ds_pb2.BaseResponse(success=0, message='File Path not exist', sequence_id=request.sequence_id)
+        
+        if not os.path.isfile(path):
+            return ds_pb2.BaseResponse(success=0, message='Is not a file', sequence_id=request.sequence_id)
+        
+        # 向NameServer请求解锁
+        try:
+            metadata = context.invocation_metadata()
+            response = self.stub.UnlockFile(ns_pb2.UnlockFileRequest(lock_type=1, filepath=request.path), metadata=metadata)
+            if response.success == 0:
+                return ds_pb2.BaseResponse(success=0, message='File is already unlocked', sequence_id=request.sequence_id)
+        except grpc.RpcError as e:
+            self.logger.error(e)
+            return ds_pb2.BaseResponse(success=0, message='RPC Error', sequence_id=request.sequence_id)
+
+        return ds_pb2.BaseResponse(success=1, message='Close File Successfully', sequence_id=request.sequence_id)
+    
     def ChangeDir(self, request, context):
         self.logger.info(f"change dir... - {request.sequence_id}")
         path = f'{self.data_dir}{request.path}'

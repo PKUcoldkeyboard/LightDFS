@@ -15,16 +15,18 @@ service DataServer
     // 读取文件，对应cat命令
     rpc ReadFile(ReadFileRequest) returns (ReadFileResponse) {}
     // 上传文件
-    rpc UploadFile(stream UploadFileRequest) returns (BaseResponse) {}
-    rpc UploadFileWithoutSync(stream UploadFileRequest) returns (BaseResponse) {}
+    rpc UploadFile(UploadFileRequest) returns (BaseResponse) {}
+    rpc UploadFileWithoutSync(UploadFileRequest) returns (BaseResponse) {}
     // 下载文件
     rpc DownloadFile(DownloadFileRequest) returns (DownloadFileResponse) {}
     // 复制文件或文件夹
     rpc CopyFile(CopyFileRequest) returns (BaseResponse) {}
     // 写文件
-    rpc WriteFile(stream WriteFileRequest) returns (BaseResponse) {}
+    rpc WriteFile(WriteFileRequest) returns (BaseResponse) {}
     // 打开文件
     rpc OpenFile(OpenFileRequest) returns (BaseResponse) {}
+    // 关闭文件
+    rpc CloseFile(CloseFileRequest) returns (BaseResponse) {}
     // 通知下线
     rpc NotifyOffline(NotifyOfflineRequest) returns (BaseResponse) {}
     // 列出文件，对应ls命令
@@ -142,6 +144,12 @@ message ListFileResponse
 }
 
 message ChangeDirRequest
+{
+    int64 sequence_id = 1;
+    string path       = 2;
+}
+
+message CloseFileRequest
 {
     int64 sequence_id = 1;
     string path       = 2;

@@ -36,15 +36,43 @@ class Client():
                 exit(1)
             else:
                 dataServerInfoList = response.dataServerInfoList
-                # 选择第一个DataServer
-                dataServerInfo = dataServerInfoList[0]
-                id = dataServerInfo.id
-                host = dataServerInfo.host
-                port = dataServerInfo.port
+                # 打印在线DataServer
+                print('===============================================================')
+                print('|{:^62}|'.format('Online DataServer List'))
+                print('===============================================================')
+                print('|{:^20}|{:^20}|{:^20}|'.format('ID', 'Host', 'Port'))
+                print('===============================================================')
+                for dataServerInfo in dataServerInfoList:
+                    id = dataServerInfo.id
+                    host = dataServerInfo.host
+                    port = dataServerInfo.port
+                    print('|{:^20}|{:^20}|{:^20}|'.format(id, host, port))
+                print('===============================================================')
+                # 用户选择DataServer
+                id = int(input('Please choose a DataServer ID Or Index: '))
+                if id < 0:
+                    print('Invalid DataServer ID')
+                    exit(1)
+                elif id < 10:
+                    dataServerInfo = dataServerInfoList[id]
+                    host = dataServerInfo.host
+                    port = dataServerInfo.port
+                else:  
+                    for dataServerInfo in dataServerInfoList:
+                        if dataServerInfo.id == id:
+                            host = dataServerInfo.host
+                            port = dataServerInfo.port
+                            break
+                os.system('clear')
                 channel = grpc.insecure_channel(f'{host}:{port}')
                 self.ds_stub = ds_grpc.DataServerStub(channel)
+                print(f'Connect to DataServer {host}:{port} Successfully')
 
         except grpc.RpcError as e:
+            print(e)
+            exit(1)
+        
+        except Exception as e:
             print(e)
             exit(1)
 
@@ -80,24 +108,31 @@ class Client():
     def touch(self, path):
         try:
             file_path = self.cache_path + '/' + path
-            print(file_path)
             with open (file_path, 'w') as f:
                 f.write('')
             # 获取file_path路径文件的创建时间
             ctime = os.path.getctime(file_path)
             metadata = (('jwt', self.jwt),)
             sequence_id = getId()
-            response = self.ds_stub.CreateFile(
-                ds_pb2.CreateFileRequest(path=path, sequence_id=sequence_id, ctime=ctime, mtime=ctime), metadata=metadata)
+            # response = self.ds_stub.CreateFile(
+            #     ds_pb2.CreateFileRequest(path=path, sequence_id=sequence_id, ctime=ctime, mtime=ctime), metadata=metadata)
+            # print(json.dumps({
+            #     'success': response.success,
+            #     'message': response.message,
+            #     'sequence_id': response.sequence_id,
+            # }))
+            response = self.ds_stub.UploadFile(ds_pb2.UploadFileRequest(path=path, sequence_id=sequence_id, content=b''), metadata=metadata)
             print(json.dumps({
                 'success': response.success,
                 'message': response.message,
-                'sequence_id': response.sequence_id,
+                'sequence_id': response.sequence_id,   
             }))
 
         except grpc.RpcError as e:
+            print(e)
             print('Cannot Connect to DataServer')
         except Exception as e:
+            print(e)
             print('Cannot Create File')
 
     def ls(self, path):
@@ -263,10 +298,28 @@ class Client():
                 'message': response.message,
                 'sequence_id': response.sequence_id,
             }))
-        except grpc.RpcError:
+        except grpc.RpcError as e:
+            print(e)
             print('Cannot Connect to DataServer')
         except Exception as e:
             print('Cannot Open File')
+            
+    def closefile(self, path):
+        try:
+            metadata = (('jwt', self.jwt),)
+            sequence_id = getId()
+            response = self.ds_stub.CloseFile(
+                ds_pb2.CloseFileRequest(path=path, sequence_id=sequence_id), metadata=metadata)
+            print(json.dumps({
+                'success': response.success,
+                'message': response.message,
+                'sequence_id': response.sequence_id,
+            }))
+        except grpc.RpcError as e:
+            print(e)
+            print('Cannot Connect to DataServer')
+        except Exception as e:
+            print('Cannot Close File')
             
     def cd(self, path):
         try:
@@ -471,3 +524,44 @@ if __name__ == "__main__":
                     continue
                 path = get_full_path(f'/{client.username}' + client.current_dir, command[1])
                 client.cd(path)
+        elif command[0] == 'open':
+            if len(command) <= 1:
+                print("open: missing operand")
+                continue
+
+            if len(command) > 2:
+                print("open: too many arguments")
+                continue
+
+            if len(command) == 2:
+                path = get_full_path(f'/{client.username}' + client.current_dir, command[1])
+                client.openfile(path)
+        
+        elif command[0] == 'close':
+            if len(command) <= 1:
+                print("close: missing operand")
+                continue
+
+            if len(command) > 2:
+                print("close: too many arguments")
+                continue
+
+            if len(command) == 2:
+                path = get_full_path(f'/{client.username}' + client.current_dir, command[1])
+                client.closefile(path)
+                
+        elif command[0] == 'help':
+            print("ls: list files in the directory")
+            print("pwd: print current directory")
+            print("touch: create a new file")
+            print("mkdir: create a new directory")
+            print("cat: print the content of a file")
+            print("rm: remove a file or directory")
+            print("mv: move a file or directory")
+            print("cp: copy a file or directory")
+            print("download: download a file from the server")
+            print("cd: change directory")
+            print("help: print this help message")
+            print("exit: exit the client")
+            print("open: open a file in the default application")
+            print("clos: close a file in the default application")

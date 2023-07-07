@@ -67,7 +67,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
 
     def LogoutDataServer(self, request, context):
         self.DataServerList = list(
-            filter(lambda x: x.did != request.id, self.DataServerList))
+            filter(lambda x: x.id != request.id, self.DataServerList))
         self.logger.info(f"DataServer {request.id} is offline")
         return ns_pb2.Response(success=1, message="Logout successfully!")
 
@@ -128,6 +128,7 @@ class NameServerServicer(ns_pb2_grpc.NameServerServicer):
             # 3.2 若没有加锁，则加写锁
             self.WriteLockDist[file_path] = 1
             return ns_pb2.Response(success=1, message="Lock file successfully!")
+        
 
     def UnlockFile(self, request, context):
         # 1. 判断用户是否已经登录

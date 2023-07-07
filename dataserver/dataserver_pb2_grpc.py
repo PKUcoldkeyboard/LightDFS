@@ -39,12 +39,12 @@ class DataServerStub(object):
                 request_serializer=dataserver__pb2.ReadFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.ReadFileResponse.FromString,
                 )
-        self.UploadFile = channel.stream_unary(
+        self.UploadFile = channel.unary_unary(
                 '/lightdfs.DataServer/UploadFile',
                 request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.UploadFileWithoutSync = channel.stream_unary(
+        self.UploadFileWithoutSync = channel.unary_unary(
                 '/lightdfs.DataServer/UploadFileWithoutSync',
                 request_serializer=dataserver__pb2.UploadFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
@@ -59,7 +59,7 @@ class DataServerStub(object):
                 request_serializer=dataserver__pb2.CopyFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
-        self.WriteFile = channel.stream_unary(
+        self.WriteFile = channel.unary_unary(
                 '/lightdfs.DataServer/WriteFile',
                 request_serializer=dataserver__pb2.WriteFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
@@ -67,6 +67,11 @@ class DataServerStub(object):
         self.OpenFile = channel.unary_unary(
                 '/lightdfs.DataServer/OpenFile',
                 request_serializer=dataserver__pb2.OpenFileRequest.SerializeToString,
+                response_deserializer=dataserver__pb2.BaseResponse.FromString,
+                )
+        self.CloseFile = channel.unary_unary(
+                '/lightdfs.DataServer/CloseFile',
+                request_serializer=dataserver__pb2.CloseFileRequest.SerializeToString,
                 response_deserializer=dataserver__pb2.BaseResponse.FromString,
                 )
         self.NotifyOffline = channel.unary_unary(
@@ -124,14 +129,14 @@ class DataServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def UploadFile(self, request_iterator, context):
+    def UploadFile(self, request, context):
         """上传文件
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def UploadFileWithoutSync(self, request_iterator, context):
+    def UploadFileWithoutSync(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -151,7 +156,7 @@ class DataServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def WriteFile(self, request_iterator, context):
+    def WriteFile(self, request, context):
         """写文件
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -160,6 +165,13 @@ class DataServerServicer(object):
 
     def OpenFile(self, request, context):
         """打开文件
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CloseFile(self, request, context):
+        """关闭文件
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -214,12 +226,12 @@ def add_DataServerServicer_to_server(servicer, server):
                     request_deserializer=dataserver__pb2.ReadFileRequest.FromString,
                     response_serializer=dataserver__pb2.ReadFileResponse.SerializeToString,
             ),
-            'UploadFile': grpc.stream_unary_rpc_method_handler(
+            'UploadFile': grpc.unary_unary_rpc_method_handler(
                     servicer.UploadFile,
                     request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'UploadFileWithoutSync': grpc.stream_unary_rpc_method_handler(
+            'UploadFileWithoutSync': grpc.unary_unary_rpc_method_handler(
                     servicer.UploadFileWithoutSync,
                     request_deserializer=dataserver__pb2.UploadFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
@@ -234,7 +246,7 @@ def add_DataServerServicer_to_server(servicer, server):
                     request_deserializer=dataserver__pb2.CopyFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
-            'WriteFile': grpc.stream_unary_rpc_method_handler(
+            'WriteFile': grpc.unary_unary_rpc_method_handler(
                     servicer.WriteFile,
                     request_deserializer=dataserver__pb2.WriteFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
@@ -242,6 +254,11 @@ def add_DataServerServicer_to_server(servicer, server):
             'OpenFile': grpc.unary_unary_rpc_method_handler(
                     servicer.OpenFile,
                     request_deserializer=dataserver__pb2.OpenFileRequest.FromString,
+                    response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
+            ),
+            'CloseFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.CloseFile,
+                    request_deserializer=dataserver__pb2.CloseFileRequest.FromString,
                     response_serializer=dataserver__pb2.BaseResponse.SerializeToString,
             ),
             'NotifyOffline': grpc.unary_unary_rpc_method_handler(
@@ -355,7 +372,7 @@ class DataServer(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def UploadFile(request_iterator,
+    def UploadFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -365,14 +382,14 @@ class DataServer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/UploadFile',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/UploadFile',
             dataserver__pb2.UploadFileRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def UploadFileWithoutSync(request_iterator,
+    def UploadFileWithoutSync(request,
             target,
             options=(),
             channel_credentials=None,
@@ -382,7 +399,7 @@ class DataServer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/UploadFileWithoutSync',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/UploadFileWithoutSync',
             dataserver__pb2.UploadFileRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
@@ -423,7 +440,7 @@ class DataServer(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def WriteFile(request_iterator,
+    def WriteFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -433,7 +450,7 @@ class DataServer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/lightdfs.DataServer/WriteFile',
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/WriteFile',
             dataserver__pb2.WriteFileRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
@@ -452,6 +469,23 @@ class DataServer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/OpenFile',
             dataserver__pb2.OpenFileRequest.SerializeToString,
+            dataserver__pb2.BaseResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CloseFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lightdfs.DataServer/CloseFile',
+            dataserver__pb2.CloseFileRequest.SerializeToString,
             dataserver__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
