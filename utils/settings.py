@@ -1,19 +1,20 @@
 # LightDFS settings for the project
+import os
 
 DFS_SETTINGS = {
     "NAMESERVER": {
         "HOST": "localhost",
-        "PORT": 9000,
+        "PORT": int(os.getenv("NAMESERVER_PORT", 9000)),
         "DATA_DIR": "/tmp/lightdfs/nameserver",
     },
     "DATASERVER": {
         "HOST": "localhost",
-        "PORT": 10070,
+        "PORT": int(os.getenv("DATASERVER_PORT", 10070)),
         "DATA_DIR": "/tmp/lightdfs/dataserver",
     },
     "CLIENT": {
         "HOST": "localhost",
-        "PORT": 9090,
+        "PORT": int(os.getenv("CLIENT_PORT", 9070)),
         "DATA_DIR": "/tmp/lightdfs/client",
     },
     "LOG_CONFIG": {
