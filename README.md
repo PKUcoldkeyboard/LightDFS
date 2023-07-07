@@ -8,12 +8,6 @@
 ## 📝 简介
 高级分布式系统2023-SP期末大作业，实现一个轻量级分布式文件系统。
 
-## ⭐ 特点
-
-## ⏩ 快速开始
-
-## 📖 文档
-
 ## 🙌 贡献者列表
 <a href="https://github.com/PKUcoldkeyboard/LightDFS/graphs/contributors">
   <img src="https://contrib.rocks./image?repo=PKUcoldkeyboard/LightDFS" />
